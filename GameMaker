@@ -1,0 +1,104 @@
+
+#region  // Key assignment
+
+key_left = keyboard_check(vk_left) or keyboard_check(ord("A")) ;
+key_right = keyboard_check(vk_right) or keyboard_check(ord("D")) ;
+key_up = keyboard_check(vk_up)  or keyboard_check(ord("W")) ; 
+key_down = keyboard_check(vk_down)  or keyboard_check(ord("S")) ;
+key_fire = keyboard_check(vk_space) ;
+boss_mode = keyboard_check(ord("B")) ; 
+#endregion
+
+#region  // Movement Prediction
+var move_h = key_right - key_left ; 
+var move_v = key_up - key_down ;
+
+walkspeed= walkspeed0 + speed_up/2
+
+hsp = move_h * walkspeed ;
+vsp = -(move_v * walkspeed) ;
+
+#endregion
+
+#region  // Speed up function + Animation on speed up
+sprite_index = sPlayer
+image_speed=0
+if hsp != 0 or vsp!=0
+{
+	speed_up = speed_up + 1 ;
+	for(i = 1; i < 6; i = i + 1 )
+	{
+		if speed_up == i * 12 
+		{ 
+			image_index = speed_up / 12 - 1  // Animation
+		}
+	}
+	if speed_up > 60
+	{
+		speed_up = 60 ;
+	}	
+}
+else
+{
+	frame_count = frame_count+1 ;
+	if frame_count = 60
+	{
+		speed_up=0 ;
+		frame_count=0 ;
+		image_index=0 ;  // Animation 
+	}
+}
+
+#endregion
+
+#region  // Object Collision 
+if place_meeting(x+hsp, y, oWall)
+{
+	while (!place_meeting(x+sign(hsp), y, oWall))
+	{
+		x = x + sign(hsp) ;
+	}
+	hsp = 0
+}
+
+if place_meeting(x, y + vsp , oWall)
+{
+	while (!place_meeting(x, y + sign(vsp), oWall))
+	{
+		y = y + sign(vsp) ;
+	}
+	vsp = 0
+}
+
+#endregion
+
+#region  // Actual movement
+
+x = x + hsp ;
+y = y + vsp ;
+
+#endregion
+
+#region  // Firing mechanism
+
+firing_delay = firing_delay - 1
+if (key_fire=1) and (firing_delay < 0)
+{
+	firing_delay = 5
+	with(instance_create_layer(x,y, "Bullets", oBullet))
+	{
+		speed = 40
+		direction = other.image_angle + 90
+		image_angle = other.image_angle 
+	}
+}
+
+#endregion
+
+// Boss Mode - look into changing 
+
+if boss_mode == 1 && firing_delay<0
+{
+	firing_delay= 10
+	image_angle = image_angle - 90 
+}
