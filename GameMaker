@@ -40,11 +40,11 @@ if hsp != 0 or vsp!=0
 }
 else
 {
-	frame_count = frame_count+1 ;
-	if frame_count = 60
+	frame_count1 = frame_count1+1 ;
+	if frame_count1 = 60
 	{
 		speed_up=0 ;
-		frame_count=0 ;
+		frame_count1=0 ;
 		image_index=0 ;  // Animation 
 	}
 }
@@ -81,24 +81,62 @@ y = y + vsp ;
 
 #region  // Firing mechanism
 
-firing_delay = firing_delay - 1
-if (key_fire=1) and (firing_delay < 0)
-{
-	firing_delay = 5
+if heating_up>=150 overheated=1
+else			//  Look into increasing the heating_up variable
+				//  Make it be more all or nothing 
+{				//  For example, if the player overheats, make him feel it 
+	if heating_up<0 
+	{
+		overheated=0
+		heating_up=0  //Ensures that heating_up can't be negative 
+	}
+}
+
+firing_delay = firing_delay - 1 
+
+if key_fire=1 and overheated=0 and firing_delay<0 
+{                 //when 1, can't fire 
+	firing_delay=2   //frames that the game waits until it fires again
+	heating_up = heating_up + 40
 	with(instance_create_layer(x,y, "Bullets", oBullet))
 	{
-		speed = 40
+		speed = 40    
+				//Ask Andrew about the speed 
 		direction = other.image_angle + 90
 		image_angle = other.image_angle 
 	}
 }
 
+if test1=1 heating_up = heating_up - 4 
+else heating_up = heating_up - 7  //When he is overheated, decrease faster
+
+for(i = 1; i < 6; i = i + 1 )   //In 5 steps atm
+{
+	if heating_up > i * 30 and heating_up < (i+1)*30
+	{ 
+		image_index = round(heating_up / 30) - 1  // Animation 
+	}
+}
+	
 #endregion
 
-// Boss Mode - look into changing 
+#region  // Boss Mode -Toggled by B 
 
-if boss_mode == 1 && firing_delay<0
-{
-	firing_delay= 10
-	image_angle = image_angle - 90 
+if boss_mode=1 and frame_count2>60
+{					//Ensures that you can't spam B 
+	frame_count2=0
+	if global.mode = "Wave"
+	{
+		image_angle = image_angle - 270
+		global.mode = "Boss" //switches to Boss mode
+	}
+	else
+	{
+		image_angle = image_angle - 90 
+		global.mode = "Wave" //switches to Wave mode 
+	}	
 }
+else frame_count2 += 1
+
+#endregion
+
