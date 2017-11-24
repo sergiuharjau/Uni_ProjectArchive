@@ -1,0 +1,7 @@
+I have pretty much commented every line, so everyone can understand what's going on.
+
+In short: It asks a user if they have an account, if yes, the user tries to login, if not, the user gets to create an account.
+
+The function accountMain returns True when the user has successfully logged in, and false when he hasn't. 
+
+It's fully working at the moment. 

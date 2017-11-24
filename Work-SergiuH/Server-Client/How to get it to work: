@@ -1,0 +1,11 @@
+In this folder there are two files, the server, and the client. 
+In order to get it to work you obviously need python, either clone it into codio, or download it to your pc.
+
+If you are on windows, the notepad file will be very hard to read, it's just the way linux does it, sorry.
+Codio is by far the best way to do this.
+
+Once you have python, run the server file first, followed by the client one.
+Inputing "end" on the client bash will stop the connection.
+Thanks! 
+
+#note: You will need two terminals in codio in order to get this to work.
