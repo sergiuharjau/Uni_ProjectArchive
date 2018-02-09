@@ -10,8 +10,8 @@ def stopwatch(minutes):
 
 while True:
     print("Oh shit we up and running")
-    p = subprocess.Popen("exec " + "./cpuminer -a lyra2zoin -o stratum+tcp://zoi-pool3.chainsilo.com:3032 -u Greeny47.Joyent1 -p Joyent1", shell=True)
-    stopwatch(40)
+    p = subprocess.Popen("exec " + "./cpuminer -a lyra2zoin -o stratum+tcp://zoi-pool3.chainsilo.com:3032 -u Greeny47.AndreiAlibaba -p AndreiAlibaba", shell=True)
+    stopwatch(50)
     print("We dead baby")
     p.kill()
-    stopwatch(20)
+    stopwatch(5)
