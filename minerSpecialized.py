@@ -46,7 +46,7 @@ def checkHashrate(vpsName):
         i += 1
 
     returnStr = "\n" + vpsName + "\n"
-    returnStr += " Total Hashrate: " + str(round(totalHashrate))
+    returnStr += "Total Hashrate: " + str(round(totalHashrate))
     returnStr += " Shares: " + str(acceptedSharesCount)
     returnStr += " Average: " + str(round(totalHashrate / acceptedSharesCount))
     returnStr += " Days: " + str(dayCount)
@@ -64,15 +64,15 @@ i = 0
 
 while True:
     p = subprocess.Popen("exec " + "./cpuminer -a lyra2zoin -o stratum+tcp://zoi-pool3.chainsilo.com:3032 -u Greeny47.Joyent1 -p Joyent1 >> 10daysNH.txt", shell=True)
-    stopwatch(3)                                                       #we're appending mining output to 10daysNH.txt
+    stopwatch(58)                                                       #we're appending mining output to 10daysNH.txt
 #waits 58 minutes then kill the process
     p.kill()
-    stopwatch(0)
+    stopwatch(2)
 #waits 2 minutes then starts again
 
-    daysPassed += 1
+    daysPassed += 1/24
 #since this is ran every hour, we add 1/24th of a day, so in 24 hours, we get a full day
-    if daysPassed == 2:
+    if daysPassed == 10:
         i += 1
 #we're printing everything to the NOHUP of the python program.
         print(checkHashrate(vpsName))
@@ -81,6 +81,5 @@ while True:
 
         p = subprocess.Popen("mv 10daysNH.txt /root/10daysNH" +str(i)+ ".txt ", shell = True)
 #we move the file completely, so when we start the mining, it creates a new empty file
-        print("The 10daysNH file is now on /root/ and will be available forever hopefully")
-#in 10 days, we will overwrite the file with a new one
+
         daysPassed = 0
