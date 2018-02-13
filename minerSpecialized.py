@@ -63,7 +63,7 @@ def stopwatch(minutes):
 i = 0
 
 while True:
-    p = subprocess.Popen("exec " + "(./cpuminer -a lyra2zoin -o stratum+tcp://zoi-pool3.chainsilo.com:3032 -u Greeny47.Joyent1 -p Joyent1) >> 10daysNH.txt", shell=True)
+    p = subprocess.Popen("exec " + "./cpuminer -a lyra2zoin -o stratum+tcp://zoi-pool3.chainsilo.com:3032 -u Greeny47.Joyent1 -p Joyent1 >> 10daysNH.txt", shell=True)
     stopwatch(3)                                                       #we're appending mining output to 10daysNH.txt
 #waits 58 minutes then kill the process
     p.kill()
