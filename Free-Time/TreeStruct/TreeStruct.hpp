@@ -19,7 +19,7 @@ public:
 	void increaseCapacity(int value) ; // += pow(2,value)
 	
 	void sort() ; 	
-	string find(string element) ; 
+	int find(string element) ; 
 	
 	string popLast() ; 
 	string popFirst() ; 
@@ -32,6 +32,11 @@ public:
 	
 	vector<string> getElements() ;  
 	
+	vector<int> getHeapIndex(int number) ; // Gets the indexes of Parent + Children of heap # 
+									//returns-> 0 - Parent, 1- Left Child, 2- Right Child 
+	void setHeap(vector<int> order, int number) ; 
+									// Sets a certain heap, with a vector of the right order
+									// order = {2, 0, 1} = right child should be parent, etc 
 private:
 	unsigned int capacity ; // max 2^32 elements
 	int size ; 

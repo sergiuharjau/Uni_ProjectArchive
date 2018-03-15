@@ -10,9 +10,7 @@ int main()
 	{
 		string d ; 
 		
-		tree.appendVector({"loleanu", "dota2"}) ; 
-		cout << "Size "<< tree.getSize() << endl ; 
-		cout << "Heaps "<< tree.getHeaps() << endl ;
+		tree.appendVector({"1", "2", "3", "4", "5", "6", "7","8","9","10","11","12"}) ;  
 		cout << "Elements " ; 
 		for (string c: tree.getElements())
 		{
@@ -20,7 +18,11 @@ int main()
 		}
 
 		cout << endl ; 
-		cout << tree.getFirst() << " " << tree.getLast() << endl ; 
+		cout << "Size "<< tree.getSize() << endl ;
+		cout << "Heaps "<< tree.getHeaps() << endl ;
+		
+		cout << tree.find("2") << endl ; 
+		
 		cin >> d ; 
 	}
 	return 0 ;
