@@ -53,58 +53,157 @@ void TreeStruct::increaseCapacity(int value)
 	}
 }
 
-void sort()
+void TreeStruct::sort()
 {
+	vector <string> sortedElements ;
+	float size = this-> elements.size()  ;
+    bool firstTime = true ; 
 	
-}
-
-int TreeStruct::find(string element)
-{
-	int desiredHeap = 1 ; 
-	int count = 0 ; 
-	
-	for (int i = 1 ; i < getHeaps() ; i ++)
+	for (int i = 0 ; i < size  ; i ++)
 	{
-		//cout << "Inside for loop" << endl ; 
+		
+		int percent = i / size * 100.f; 
+		
+		cout << percent << " percent."<< endl ; 
+		
+		int heaps = getHeaps() ; 
+		
+		
+		if (firstTime == true)	
+		{ // runs on first time
+			for (int i = heaps ; i > 0 ; i --)
+			{
+				//cout << "Heap nr: " << i << endl ; 
 
-		if (element == elements[getHeapIndex(i)[0]])
-		{
-			cout << count << endl ; 
-			return i ; 
-		}
-		else if (i != desiredHeap) 
-		{
-			//
+				vector <int> indexes = getHeapIndex(i) ; 		
+
+				int parentIndex = indexes[0] ;
+				int firstCIndex = indexes[1] ; 
+				int secondCIndex = indexes[2] ;
+
+				string parent = this-> elements[parentIndex] ; 
+				string firstC = this-> elements[firstCIndex] ;
+				string secondC ; 
+				if ( secondCIndex == -1 )
+				{
+					secondC = "" ; 
+				}
+				else 
+				{
+					secondC = this-> elements[secondCIndex] ;
+				}
+
+				if ( parent < firstC and (parent < secondC or secondC == "" )) 
+				{
+					// 
+				}
+				else if (firstC < secondC or secondC == "")
+				{
+					//cout << "swap first and parent" << endl ; 
+					swap( this-> elements[parentIndex] , this-> elements[firstCIndex] ) ; 
+
+				}
+				else
+				{
+					//cout << "swap second and parent" << endl ; 
+					swap ( this-> elements[parentIndex] , this-> elements[secondCIndex] ) ;
+
+				}
+				
+				firstTime = false ; 
+			}
 		}
 		else
-		{
-			count += 1 ; 
-			int parentIndex = getHeapIndex(i)[0] ; // returns the vector of heap, position 0 is parent index 
-			cout << "Parent index "<< parentIndex << endl ; 
-			cout << "Heap Number " << i << endl ; 
-			if (element < elements[parentIndex])
+		{ // runs on every other time
+			int desiredHeap = 1 ;  
+			for (int i = 1 ; i <= log2( this-> getSize() ) ; i ++ )
 			{
-				cout << element << " is smaller than " << elements[parentIndex] << endl ; 
-				desiredHeap = 2 * i -1  ; 
-				cout << "We go left to desired heap " << desiredHeap << endl ; 
-			}
-			else
-			{
-				cout << element << " is bigger than " << elements[parentIndex] << endl ; 
-				desiredHeap = 2 * i + 1 -1 ; 
-				cout << "We go right to desired heap " << desiredHeap << endl ; 
-			}
+				
+				vector <int> indexes = getHeapIndex(desiredHeap) ; 		
+				
+				int count = 0 ;
+				
+				for (int x : indexes)
+				{
+					if ( x == -1 ) count += 1 ; 
+				}
+				
+				if (count == 3) break ;
+				
+				int parentIndex = indexes[0] ;
+				int firstCIndex = indexes[1] ; 
+				int secondCIndex = indexes[2] ;
+
+				string parent = this-> elements[parentIndex] ; 
+				string firstC = this-> elements[firstCIndex] ;
+				string secondC ; 
+				
+				if ( secondCIndex == -1 )
+				{
+					secondC = "" ; 
+				}
+				else 
+				{
+					secondC = this-> elements[secondCIndex] ;
+				}
+
+				if ( parent < firstC and (parent < secondC or secondC == "" )) 
+				{
+					// 
+				}
+				else if (firstC < secondC or secondC == "")
+				{
+					swap( this-> elements[parentIndex] , this-> elements[firstCIndex] ) ; 
+					desiredHeap = i * 2 ;
+
+				}
+				else
+				{ 
+					swap ( this-> elements[parentIndex] , this-> elements[secondCIndex] ) ;
+					desiredHeap = i * 2 + 1 ;
+				}			
+			}				
 		}
+		//cout << i << endl ; 
+		//cout << "Current elements: " ; 
+		//for (string c : elements)
+		//{
+		//	cout << c << " "; 
+		//}
+		//cout << endl ; 
+		
+		//cout << "First element: " << elements[0] << " Last element: " << elements[elements.size() - 1] << endl ; 
+
+		swap (this-> elements[0] , this-> elements[this->elements.size() - 1]) ; 
+		sortedElements.emplace_back( this-> popLast() ) ;
+		
+		//cout << "Updated elements: " ;
+		//for (string c : elements)
+		//{
+		//	cout << c << " " ; 
+		//}
+		///cout << endl ; 
+				
+		//cout << "Sorted elements " << endl ; 
+		//for (string c: sortedElements)
+		//{
+		//	cout << c << " " ; 
+		//}
+		//cout << endl ; 
 	}
 	
-	return 0 ; // change to 0 
+	this-> elements = sortedElements ; 
+}
+int TreeStruct::find(string element)
+{
+	
 }
 
 vector<int> TreeStruct::getHeapIndex(int number)
 {
 	vector <int> result = {-1,-1,-1}; 
 	
-	if (number <= this-> getHeaps() + 1 )
+	if (number <= this-> getHeaps() )
 	{
 		result[0] = number - 1 ; // Parent 
 		if (2*number > getSize()) result[1] = -1; // if it has no first child = -1 
@@ -120,9 +219,10 @@ vector<int> TreeStruct::getHeapIndex(int number)
 string TreeStruct::popLast()
 {
 	string result = elements[getSize() - 1 ] ; 
-	elements.erase(elements.end()) ; 
+	elements.erase(elements.end() -1) ; 
 		
 	this-> size -= 1 ; 
+	this-> heaps = this-> size / 2 ; 
 	
 	return result ; 
 }
@@ -133,6 +233,7 @@ string TreeStruct::popFirst()
 	this-> elements.erase(elements.begin()) ; 
 		
 	this-> size -= 1 ; 
+	this-> heaps = this-> size / 2 ; 
 	
 	return result ; 
 }

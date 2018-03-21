@@ -1,6 +1,34 @@
 #include "TreeStruct.hpp" 
-
+#include <fstream> 
 using namespace std; 
+
+
+vector <string> readPasswords(string filename)
+{
+	vector <string> pwdVector {} ; 
+
+	string password ; 
+	
+	ifstream inFile ; 
+	
+	inFile.open(filename);
+	
+	if (!inFile)
+	{
+		cerr << "Unable to open file datafile.txt" ;
+		exit(1) ;   // call system to stop
+	}
+
+	while (inFile >> password) 
+	{
+		pwdVector.emplace_back(password) ;
+	}
+	
+	inFile.close() ;
+	
+	return pwdVector ; 
+}
+
 
 int main()
 {
@@ -10,7 +38,10 @@ int main()
 	{
 		string d ; 
 		
-		tree.appendVector({"1", "2", "3", "4", "5", "6", "7","8","9","10","11","12"}) ;  
+		tree.appendVector(readPasswords("linkedin_passwords.txt")) ;  
+		
+		tree.appendVector({"b" ,"c","d","e","a"}) ; 
+		
 		cout << "Elements " ; 
 		for (string c: tree.getElements())
 		{
@@ -18,10 +49,17 @@ int main()
 		}
 
 		cout << endl ; 
+		
 		cout << "Size "<< tree.getSize() << endl ;
 		cout << "Heaps "<< tree.getHeaps() << endl ;
 		
-		cout << tree.find("2") << endl ; 
+		tree.sort() ; 
+		cout << "Sorted elements " ; 
+		for (string c: tree.getElements())
+		{
+			cout << c << " " ; 
+		}
+		cout << endl ; 
 		
 		cin >> d ; 
 	}
