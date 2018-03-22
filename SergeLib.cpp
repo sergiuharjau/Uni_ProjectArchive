@@ -2,28 +2,21 @@
 
 using namespace std ;
 
-/*SergeLib::SergeLib() 
+// TEMPLATES GO IN THE HEADER FILE 
+
+clock_t SergeLib::startWatch() 
 {
-//
-//
+    clock_t start = clock() ; 
+    
+    return start ; 
+}
+ 
+double SergeLib::stopWatch(clock_t start)
+{
+    clock_t elapsedTicks = clock() - start ; 
+    
+    double elapsedSeconds = (float)elapsedTicks / CLOCKS_PER_SEC ;
+    
+    return elapsedSeconds ; 
 }
 
-template <typename container> 
-container SergeLib::bubbleSort(container sequence)
-{
-    bool sortedCheck = false ; 
-    while (sortedCheck == false)
-    {
-        sortedCheck = true ; 
-        for(container::iterator iter = sequence.begin() ; iter != sequence.end() ; iter = next(iter))
-        {
-            if (*iter > *next(iter)) // if not in order, swap 
-            {
-                iter_swap(iter,next(iter)) ;
-                sortedCheck = false ; // if we swap, it means they're not in order 
-            }
-        }
-    }
-    
-    return sequence ; 
-}*/

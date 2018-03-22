@@ -5,15 +5,22 @@ using namespace std ;
 int main() 
 {
    // SergeLib object ; 
+    vector<int> unsorted ; 
+    srand(time(NULL)) ; 
     
-    vector<int> unsorted = {3, 9, 2 , 5, 18, 1} ; 
-    
-    SergeLib::selectionSort(unsorted.begin() , unsorted.end() ) ; 
-    
-    for (int element : unsorted)
+    int testSize = 100000 ;  
+    for (int i = 0 ; i < testSize ; i ++ )
     {
-        cout << element << endl ; 
-    }
+        unsorted.emplace_back(rand()%testSize) ; 
+    } 
+    
+    cout << SergeLib::sortedCheck(unsorted.begin() , unsorted.end() ) << endl ;     
+    clock_t start = SergeLib::startWatch() ;
+    
+    SergeLib::quickSort( unsorted.begin() , unsorted.end() ) ; 
+    
+    cout << "Elapsed seconds: " <<SergeLib::stopWatch(start) << endl ;   
+    cout << SergeLib::sortedCheck(unsorted.begin() , unsorted.end()) << endl ; 
     
     return 0 ; 
 }
