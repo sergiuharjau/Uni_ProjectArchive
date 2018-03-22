@@ -9,10 +9,10 @@ using namespace std;
 
 namespace SergeLib 
 {  
-    // sorting algorithms for any container 
+// Sorting algorithms
     
     template <typename ITER> 
-    string sortedCheck(ITER begin, ITER end) ;
+    bool sortedCheck(ITER begin, ITER end) ;
     
     template <typename ITER> 
     void bubbleSort (ITER begin, ITER end) ;
@@ -20,27 +20,41 @@ namespace SergeLib
     template <typename ITER>   
     void selectionSort (ITER begin, ITER end) ; 
 
-    template <typename ITER> // works only vectors(of anything) currently     
+    template <typename ITER> // only works on vectors(of anything) 
     void quickSort (ITER begin, ITER end) ; 
 
     template <typename ITER>   
-    void insertionSort (ITER begin, ITER end) ; 
+    void insertionSort (ITER begin, ITER end) ; // to do 
     
     template <typename ITER>  
-    void mergeSort (ITER begin, ITER end) ;
+    void mergeSort (ITER begin, ITER end) ; // to do 
     
     template <typename ITER>  
-    int bogoSort (ITER begin, ITER end) ; //returns number of tries until sorted 
+    int bogoSort (ITER begin, ITER end) ; //to do 
    
     template <typename ITER>      
-    void sleepSort (ITER begin, ITER end) ; //cout the numbers in order 
+    void sleepSort (ITER begin, ITER end) ; //to do 
     
-    clock_t startWatch() ; 
-    
-    double stopWatch(clock_t start) ; 
+//Profiling Tools 
+    clock_t startWatch() ; // returns clock_t object, we pass that to the stopWatch() 
+    double stopWatch(clock_t start) ; // returns time in seconds as a double 
 
+// Searching algortihms 
+    template <typename ITER, typename T> 
+    bool isElement(ITER begin, ITER end, T element) ; // returns bool, true or false 
+                    
+    template <typename ITER, typename T>
+    ITER getElement(ITER begin, ITER end, T element) ; // returns iterator of first occurance of element, or ITER end (0)
+    
+    template <typename ITER, typename T> 
+    bool isElementDQ(ITER begin, ITER end, T element) ; // Only works on sorted, much faster  
+    
+    template <typename ITER, typename T> 
+    ITER getElementDQ(ITER begin, ITER end, T element) ;  // Only works on sorted, much faster 
+    
+    
    /*  DAVID COMMENTS 
-    stattic classes and functions 
+    static classes and functions 
     namespace is better 
     look into sorting with iterators 
     we implement templates in the header file since they can't compile before
@@ -50,14 +64,14 @@ namespace SergeLib
 // TEMPLATES GO IN THE HEADER FILE 
 
 template <typename ITER> 
-string SergeLib::sortedCheck(ITER begin, ITER end)
+bool SergeLib::sortedCheck(ITER begin, ITER end)
 {
-    string sorted = "sorted!" ;
+    bool sorted = true ;
     for (ITER it = begin ; it != prev(end) ; it = next(it))
     {                           // so we don't go out of bounds 
         if (*it > *next(it))
         {
-            sorted = "not sorted." ;
+            sorted = false ;
             break ; 
         }
     }
@@ -71,7 +85,7 @@ void SergeLib::bubbleSort (ITER begin, ITER end)
     while (sortedCheck == false)
     {
         sortedCheck = true ; 
-        for(ITER iter = begin ; iter != end ; iter = next(iter))
+        for(ITER iter = begin ; iter != prev(end) ; iter = next(iter))
         {
             if (*iter > *next(iter)) // if not in order, swap 
             {
@@ -79,7 +93,6 @@ void SergeLib::bubbleSort (ITER begin, ITER end)
                 sortedCheck = false ; // if we swap, it means they're not in order 
             }
         }
-        end = prev(end) ; 
     } 
 } 
 
@@ -145,14 +158,12 @@ void SergeLib::quickSort (ITER begin, ITER end)
             sortedSequence.emplace_back(*it) ; // add dereferenced iterator to Sorted 
         }
     }
-    
-    
+       
     for (int i = 0 ; i < pivotCount ; i++)
     {
         sortedSequence.emplace_back(*pivot) ; 
     }
-    
-    
+     
     if (moreThan.size() == 0)
     {
         //
@@ -171,8 +182,7 @@ void SergeLib::quickSort (ITER begin, ITER end)
         }
     }
     
-    int i = 0 ;
-        
+    int i = 0 ;   
     for (ITER it = begin; it != end ; it = next(it))
     {
         *it = sortedSequence[i];
@@ -180,5 +190,83 @@ void SergeLib::quickSort (ITER begin, ITER end)
     }
 }
 
+template <typename ITER, typename T> 
+bool SergeLib::isElement(ITER begin, ITER end, T element) 
+{
+    bool result = false ; 
+    
+    for (ITER it = begin ; it != end ; it = next(it))
+    {
+        if (*it == element)
+        {
+            result = true ; 
+            break ; 
+        }
+    }
+    return result ;    
+}
+
+template <typename ITER, typename T> 
+ITER SergeLib::getElement(ITER begin, ITER end, T element)
+{
+    ITER it ; 
+    
+    for (it = begin ; it != end ; it = next(it))
+    {
+        if (*it == element)
+        {
+            break ; 
+        }
+    }
+    return it ; 
+}
+
+template <typename ITER, typename T> 
+bool SergeLib::isElementDQ(ITER begin, ITER end, T element)
+{  
+    if (begin + 1 == end) return false ; // means size is 0, so no element found  
+    
+    ITER it = begin ; 
+    
+    int position = (end-begin) /2 ; 
+    
+    advance(it, position ) ; // move to middle position 
+    
+    if (*it == element) return true  ; // if middle is element, bingo 
+  
+    if (*it > element) // if it's bigger, look in the smaller ones 
+    {
+        return isElementDQ(begin, it, element) ; 
+    }
+    else // vice versa 
+    {
+        return isElementDQ(it+1, end, element) ; 
+    }
+  
+}
+
+template <typename ITER, typename T> 
+ITER SergeLib::getElementDQ(ITER begin, ITER end, T element)
+{  
+    ITER it = begin ; 
+    
+    int position = (end-begin) /2 ; 
+    
+    advance(it, position ) ; // move to middle position 
+    
+    if (*it == element) return it  ; // if middle is element, bingo 
+  
+    if (*it > element) // if it's bigger, look in the smaller ones 
+    {
+        if (it == begin) return begin ; // Throw error in the future 
+        return getElementDQ(begin, it, element) ; 
+    }
+    else // vice versa 
+    {
+        if (it+1 == end) return it+1 ; // Throw error in the future 
+        return getElementDQ(it+1, end, element) ; 
+    }
+      
+}
 
 #endif  

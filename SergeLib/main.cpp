@@ -10,19 +10,32 @@ int main()
     vector<int> unsorted ; 
     srand(time(NULL)) ; 
     
-    int testSize = 100000 ;  
+    int testSize = 100000 ; //1 billion 
     for (int i = 0 ; i < testSize ; i ++ )
     {
-        unsorted.emplace_back(rand()%testSize) ; 
+        unsorted.emplace_back(i) ; 
     } 
     
-    cout << SergeLib::sortedCheck(unsorted.begin() , unsorted.end() ) << endl ;     
-    clock_t start = SergeLib::startWatch() ;
+    cout <<  "Sorted? "<< SergeLib::sortedCheck(unsorted.begin() , unsorted.end() ) << endl ; 
     
-    SergeLib::quickSort( unsorted.begin() , unsorted.end() ) ; 
+    clock_t start = SergeLib::startWatch() ; 
     
-    cout << "Elapsed seconds: " <<SergeLib::stopWatch(start) << endl ;   
-    cout << SergeLib::sortedCheck(unsorted.begin() , unsorted.end()) << endl ; 
     
+    SergeLib::bubbleSort( unsorted.begin() , unsorted.end() ) ; // actual sorting happens here 
+    
+    
+    cout << "Elapsed seconds: " << SergeLib::stopWatch(start) << endl ; 
+    
+    cout << "Sorted? "<< SergeLib::sortedCheck( unsorted.begin() , unsorted.end()) << endl ; 
+        
+    
+    start = SergeLib::startWatch() ; 
+     
+    cout << "Element, DQ " << *SergeLib::getElementDQ( unsorted.begin() , unsorted.end() , 100000) << endl ; 
+    
+    
+    
+    cout << "Elapsed seconds: " << SergeLib::stopWatch(start) << endl ; 
+ 
     return 0 ; 
 }
