@@ -21,7 +21,7 @@ int main()
     clock_t start = SergeLib::startWatch() ; 
     
     
-    SergeLib::bubbleSort( unsorted.begin() , unsorted.end() ) ; // actual sorting happens here 
+    SergeLib::quickSort( unsorted.begin() , unsorted.end() ) ; // actual sorting happens here 
     
     
     cout << "Elapsed seconds: " << SergeLib::stopWatch(start) << endl ; 
@@ -32,9 +32,7 @@ int main()
     start = SergeLib::startWatch() ; 
      
     cout << "Element, DQ " << *SergeLib::getElementDQ( unsorted.begin() , unsorted.end() , 99) << endl ; 
-    
-    
-    
+            
     cout << "Elapsed seconds: " << SergeLib::stopWatch(start) << endl ; 
  
     return 0 ; 

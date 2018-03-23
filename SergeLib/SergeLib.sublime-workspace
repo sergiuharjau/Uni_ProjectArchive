@@ -3,6 +3,10 @@
 	{
 		"selected_items":
 		[
+			[
+				"sor",
+				"sortedCheck"
+			]
 		]
 	},
 	"buffers":
@@ -17,31 +21,62 @@
 			}
 		},
 		{
+			"contents": "#include \"SergeLib.hpp\"\n\nusing namespace std ;\n\n// TEMPLATES GO IN THE HEADER FILE \n\nclock_t SergeLib::startWatch() \n{\n    clock_t start = clock() ; \n    \n    return start ; \n}\n\ndouble SergeLib::stopWatch(clock_t start)\n{\n    clock_t elapsedTicks = clock() - start ; \n    \n    double elapsedSeconds = (float)elapsedTicks / CLOCKS_PER_SEC ;\n    \n    return elapsedSeconds ; \n}\n\n",
 			"file": "SergeLib.cpp",
+			"file_size": 378,
+			"file_write_time": 131663070667760240,
 			"settings":
 			{
-				"buffer_size": 378,
+				"buffer_size": 377,
+				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
 		},
 		{
+			"contents": "#include \"SergeLib.hpp\" \n\nusing namespace std ; \n\n// Used for testing SergeLib\n    \nint main() \n{   \n   // SergeLib object ; \n    vector<int> unsorted ; \n    srand(time(NULL)) ; \n        \n    int testSize = 10000 ; //1 billion \n    for (int i = 0 ; i < testSize ; i ++ )\n    {\n        unsorted.emplace_back(rand() % 10000) ; \n    }\n    \n    cout <<  \"Sorted? \"<< SergeLib::sortedCheck(unsorted.begin() , unsorted.end() ) << endl ; \n    \n    clock_t start = SergeLib::startWatch() ; \n    \n    SergeLib::quickSort( unsorted.begin() , unsorted.end() ) ; // actual sorting happens here \n    \n    cout << \"Elapsed seconds: \" << SergeLib::stopWatch(start) << endl ; \n    \n    cout << \"Sorted? \"<< SergeLib::sortedCheck( unsorted.begin() , unsorted.end()) << endl ; \n        \n    \n    start = SergeLib::startWatch() ; \n     \n    cout << \"Element, DQ \" << *SergeLib::getElementDQ( unsorted.begin() , unsorted.end() , 99) << endl ; \n            \n    cout << \"Elapsed seconds: \" << SergeLib::stopWatch(start) << endl ; \n \n    return 0 ; \n}",
 			"file": "main.cpp",
+			"file_size": 1039,
+			"file_write_time": 131663072828870281,
 			"settings":
 			{
-				"buffer_size": 1034,
+				"buffer_size": 1029,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
 		}
 	],
-	"build_system": "",
+	"build_system": "Packages/Makefile/Make.sublime-build",
 	"build_system_choices":
 	[
+		[
+			[
+				[
+					"Packages/C++/C++ Single File.sublime-build",
+					""
+				],
+				[
+					"Packages/C++/C++ Single File.sublime-build",
+					"Run"
+				],
+				[
+					"Packages/Makefile/Make.sublime-build",
+					""
+				],
+				[
+					"Packages/Makefile/Make.sublime-build",
+					"Clean"
+				]
+			],
+			[
+				"Packages/Makefile/Make.sublime-build",
+				""
+			]
+		]
 	],
 	"build_varint": "",
 	"command_palette":
 	{
-		"height": 64.0,
+		"height": 392.0,
 		"last_filter": "make clean",
 		"selected_items":
 		[
@@ -146,10 +181,10 @@
 	},
 	"expanded_folders":
 	[
-		"/home/sergiu/Project-Archive/SergeLib"
 	],
 	"file_history":
 	[
+		"/home/sergiu/Project-Archive/SergeLib/Makefile",
 		"/opt/sublime_text/LANG=en_US.UTF-8",
 		"/opt/sublime_text/LC_CTYPE=en_US.UTF-8",
 		"/home/sergiu/.config/sublime-text-3/Packages/User/Package Control.sublime-settings",
@@ -191,7 +226,7 @@
 	"groups":
 	[
 		{
-			"selected": 0,
+			"selected": 2,
 			"sheets":
 			[
 				{
@@ -218,10 +253,10 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 630.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 0,
+					"stack_index": 2,
 					"type": "text"
 				},
 				{
@@ -230,15 +265,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 378,
+						"buffer_size": 377,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								0,
-								0
+								176,
+								176
 							]
 						],
 						"settings":
@@ -258,15 +293,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 1034,
+						"buffer_size": 1029,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								188,
-								188
+								178,
+								178
 							]
 						],
 						"settings":
@@ -279,7 +314,7 @@
 						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
-					"stack_index": 2,
+					"stack_index": 0,
 					"type": "text"
 				}
 			]
