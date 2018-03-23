@@ -41,10 +41,14 @@
 	"build_varint": "",
 	"command_palette":
 	{
-		"height": 304.0,
-		"last_filter": "make",
+		"height": 64.0,
+		"last_filter": "make clean",
 		"selected_items":
 		[
+			[
+				"make clean",
+				"Build With: Make - Clean"
+			],
 			[
 				"make",
 				"Build With: Make"
@@ -203,8 +207,8 @@
 						"selection":
 						[
 							[
-								82,
-								82
+								145,
+								145
 							]
 						],
 						"settings":

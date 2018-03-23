@@ -10,10 +10,10 @@ int main()
     vector<int> unsorted ; 
     srand(time(NULL)) ; 
         
-    int testSize = 9 ; //1 billion 
+    int testSize = 10000 ; //1 billion 
     for (int i = 0 ; i < testSize ; i ++ )
     {
-        unsorted.emplace_back(rand() % 100) ; 
+        unsorted.emplace_back(rand() % 10000) ; 
     }
     
     cout <<  "Sorted? "<< SergeLib::sortedCheck(unsorted.begin() , unsorted.end() ) << endl ; 
@@ -21,7 +21,7 @@ int main()
     clock_t start = SergeLib::startWatch() ; 
     
     
-    SergeLib::bogoSort( unsorted.begin() , unsorted.end() ) ; // actual sorting happens here 
+    SergeLib::bubbleSort( unsorted.begin() , unsorted.end() ) ; // actual sorting happens here 
     
     
     cout << "Elapsed seconds: " << SergeLib::stopWatch(start) << endl ; 
