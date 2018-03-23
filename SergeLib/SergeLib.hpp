@@ -4,49 +4,42 @@
 #include <iostream> 
 #include <vector> 
 #include <string> 
+#include <algorithm> 
 
 using namespace std;
 
 namespace SergeLib 
 {  
 // Sorting algorithms
-    
-    template <typename ITER> 
+    template <typename ITER> // O(n), checks if sorted 
     bool sortedCheck(ITER begin, ITER end) ;
     
-    template <typename ITER> 
+    template <typename ITER> // O(n^2), works good on small sequences 
     void bubbleSort (ITER begin, ITER end) ;
 
-    template <typename ITER>   
+    template <typename ITER> // Generally better than bubble, worse than quick   
     void selectionSort (ITER begin, ITER end) ; 
 
-    template <typename ITER> // only works on vectors(of anything) 
-    void quickSort (ITER begin, ITER end) ; 
-
-    template <typename ITER>   
-    void insertionSort (ITER begin, ITER end) ; // to do 
-    
-    template <typename ITER>  
-    void mergeSort (ITER begin, ITER end) ; // to do 
-    
-    template <typename ITER>  
-    int bogoSort (ITER begin, ITER end) ; //to do 
+    template <typename ITER> // O(n log(n), generally great all around 
+    void quickSort (ITER begin, ITER end) ; // only works on vectors(of anything) 
    
-    template <typename ITER>      
-    void sleepSort (ITER begin, ITER end) ; //to do 
+    template <typename ITER> // dear god don't use this  
+    int bogoSort (ITER begin, ITER end) ; 
+
     
 //Profiling Tools 
     clock_t startWatch() ; // returns clock_t object, we pass that to the stopWatch() 
     double stopWatch(clock_t start) ; // returns time in seconds as a double 
 
+    
 // Searching algortihms 
-    template <typename ITER, typename T> 
+    template <typename ITER, typename T> // O(n) complexity 
     bool isElement(ITER begin, ITER end, T element) ; // returns bool, true or false 
                     
     template <typename ITER, typename T>
     ITER getElement(ITER begin, ITER end, T element) ; // returns iterator of first occurance of element, or ITER end (0)
     
-    template <typename ITER, typename T> 
+    template <typename ITER, typename T> // O(log(n)) complexity 
     bool isElementDQ(ITER begin, ITER end, T element) ; // Only works on sorted, much faster  
     
     template <typename ITER, typename T> 
@@ -121,9 +114,9 @@ void SergeLib::quickSort (ITER begin, ITER end)
     ITER pivot = begin + (end-begin)/2 ; // middle iterator, pivot 
     int pivotCount ; 
     
-    vector< typename iterator_traits<ITER>::value_type > lessThan ; // gives the iterator type, such as vector<int> 
-    vector< typename iterator_traits<ITER>::value_type > moreThan ;  
-    vector< typename iterator_traits<ITER>::value_type > sortedSequence ; 
+    vector <typename iterator_traits<ITER>::value_type > lessThan ; // gives the iterator type, such as int 
+    vector <typename iterator_traits<ITER>::value_type > moreThan ;  
+    vector <typename iterator_traits<ITER>::value_type > sortedSequence ; 
     
     for (ITER it = begin ; it !=end ; it = next(it))
     {
@@ -185,10 +178,28 @@ void SergeLib::quickSort (ITER begin, ITER end)
     int i = 0 ;   
     for (ITER it = begin; it != end ; it = next(it))
     {
-        *it = sortedSequence[i];
+        *it = sortedSequence[i]; // reassign everything to original sequence 
         i++ ; 
     }
 }
+
+template <typename ITER> 
+int SergeLib::bogoSort(ITER begin, ITER end)
+{
+    int count = 0 ; // amount of tries 
+    
+    while(true)
+    {
+        if (sortedCheck(begin, end) == true)
+        {
+            return count ; 
+        }
+        random_shuffle(begin, end) ; 
+        count ++ ; 
+    }
+    
+}
+
 
 template <typename ITER, typename T> 
 bool SergeLib::isElement(ITER begin, ITER end, T element) 
@@ -209,7 +220,7 @@ bool SergeLib::isElement(ITER begin, ITER end, T element)
 template <typename ITER, typename T> 
 ITER SergeLib::getElement(ITER begin, ITER end, T element)
 {
-    ITER it ; 
+    ITER it ; //if we declare inside for loop, we go outside scope 
     
     for (it = begin ; it != end ; it = next(it))
     {
@@ -223,36 +234,27 @@ ITER SergeLib::getElement(ITER begin, ITER end, T element)
 
 template <typename ITER, typename T> 
 bool SergeLib::isElementDQ(ITER begin, ITER end, T element)
-{  
-    if (begin + 1 == end) return false ; // means size is 0, so no element found  
-    
-    ITER it = begin ; 
-    
-    int position = (end-begin) /2 ; 
-    
-    advance(it, position ) ; // move to middle position 
-    
+{     // means it only works on contiguous sequences  
+    ITER it = begin  + (end-begin)/2 ; // midle iterator 
+         
     if (*it == element) return true  ; // if middle is element, bingo 
   
-    if (*it > element) // if it's bigger, look in the smaller ones 
+    if (*it > element) // if it's bigger than *it, look in the smaller ones 
     {
+        if (begin + 1 == it) return false ; // if size is 0, return false 
         return isElementDQ(begin, it, element) ; 
     }
     else // vice versa 
     {
+        if (it+1 = end) return false ; // size 0 --> false 
         return isElementDQ(it+1, end, element) ; 
     }
-  
 }
 
 template <typename ITER, typename T> 
 ITER SergeLib::getElementDQ(ITER begin, ITER end, T element)
-{  
-    ITER it = begin ; 
-    
-    int position = (end-begin) /2 ; 
-    
-    advance(it, position ) ; // move to middle position 
+{  // means it only works on contiguous seqeunces 
+    ITER it = begin  + (end-begin)/2 ; // middle iterator 
     
     if (*it == element) return it  ; // if middle is element, bingo 
   
