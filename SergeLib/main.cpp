@@ -3,25 +3,25 @@
 using namespace std ; 
 
 // Used for testing SergeLib
-
+    
 int main() 
-{
+{   
    // SergeLib object ; 
     vector<int> unsorted ; 
     srand(time(NULL)) ; 
-    
-    int testSize = 11 ; //1 billion 
+        
+    int testSize = 9 ; //1 billion 
     for (int i = 0 ; i < testSize ; i ++ )
     {
         unsorted.emplace_back(rand() % 100) ; 
-    } 
+    }
     
     cout <<  "Sorted? "<< SergeLib::sortedCheck(unsorted.begin() , unsorted.end() ) << endl ; 
     
     clock_t start = SergeLib::startWatch() ; 
     
     
-    cout << "Tries: " << SergeLib::bogoSort( unsorted.begin() , unsorted.end() ) << endl ; // actual sorting happens here 
+    SergeLib::bogoSort( unsorted.begin() , unsorted.end() ) ; // actual sorting happens here 
     
     
     cout << "Elapsed seconds: " << SergeLib::stopWatch(start) << endl ; 
