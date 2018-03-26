@@ -58,7 +58,7 @@ class ImageManip():
 
 	def findExtensions(path):
 		"""Returns dictionary of most seen extensions in certain path."""
-		extensionDict = {} 
+		extensions = {}
 
 		for filename in os.listdir(path): #returns list of all files in path 
 			
@@ -70,15 +70,30 @@ class ImageManip():
 					extension += character 
 					trigger = True 
 
-			if extension in extensionDict:
-				extensionDict[extension] += 1 
-			else:
-				extensionDict[extension] = 1 
+			if extension in extensions:
+				extensions[extension] += 1 
+			elif extension != "":
+				extensions[extension] = 1 
 
-		return (extensionDict)
+		return (extensions)
+
+	def filterExtensions(extensions):
+		
+		for key in extensions:
+			print(key)
+		
+		keyNumber = int(input("How many keys do you want to have?"))
+		futureKeys = [] 
+
+		for i in range(keyNumber):
+			futureKeys.append(input(":"))
+
+		return futureKeys
+
+
 
 	def findFiles(path, extensions):
-		"""Find all files with required extension in path"""
+		"""Find all files with required extension in path, and all subdirectories"""
 		result = [] 
 
 		for filename in os.listdir(path):
@@ -97,9 +112,30 @@ im2 = ImageManip("c1.jpg")
 print(im1.checkAgainst(im2))
 print(im2.checkAgainst(im1))
 
-extensions = {"jpeg" : 1 , "jpg" : 1 , "png" : 1}
 
-print(ImageManip.findFiles(os.getcwd() , extensions))
+#extensions = ImageManip.filterExtensions(extensions)
+
+#print(ImageManip.findFiles("/root/" , extensions))
+
+path = "/home/sergiu/Project-Archive"
+
+directories = [] 	
+
+for root, dirs, files in os.walk(path):
+	for directory in dirs:
+		directories.append(os.path.join(root,directory))
+
+extensions = {}
+
+for path in directories:
+	for key in ImageManip.findExtensions(path):
+		if key in extensions:
+			extensions[key] += 1 
+		else:
+			extensions[key] = 1 
+
+print(extensions)
+
 
 # full size: 0.11 alike 
 # 512,512 : 0.086  
