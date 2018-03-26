@@ -77,6 +77,19 @@ class ImageManip():
 
 		return (extensionDict)
 
+	def findFiles(path, extensions):
+		"""Find all files with required extension in path"""
+		result = [] 
+
+		for filename in os.listdir(path):
+			for key in extensions:
+				if key in filename:
+					result.append(filename)
+
+		return (result)
+
+
+
 
 im1 = ImageManip("c1.jpg")
 im2 = ImageManip("c1.jpg")
@@ -84,7 +97,9 @@ im2 = ImageManip("c1.jpg")
 print(im1.checkAgainst(im2))
 print(im2.checkAgainst(im1))
 
-print(ImageManip.findExtensions(os.getcwd()))
+extensions = {"jpeg" : 1 , "jpg" : 1 , "png" : 1}
+
+print(ImageManip.findFiles(os.getcwd() , extensions))
 
 # full size: 0.11 alike 
 # 512,512 : 0.086  
