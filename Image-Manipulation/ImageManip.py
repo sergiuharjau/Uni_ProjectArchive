@@ -1,5 +1,5 @@
 from PIL import Image
-
+import os 
 
 class ImageManip():
 
@@ -12,12 +12,13 @@ class ImageManip():
 
 		self.size = 256 , 256 
 
-		self.makeReference(self.name, self.size)
+		self.makeReference(self.name, self.size) # creates self.2dArray 
 
 		pass 
 
 	def makeReference(self, name, size):
 		"""Makes 2d array of all the pixels. """
+		
 		control = Image.open(name) 
 		control.thumbnail(size)
 
@@ -55,6 +56,26 @@ class ImageManip():
 
 		return (round(likeliness/(xAxis*yAxis)*100,2)) 
 
+	def findExtensions(path):
+		"""Returns dictionary of most seen extensions in certain path."""
+		extensionDict = {} 
+
+		for filename in os.listdir(path): #returns list of all files in path 
+			
+			trigger = False 
+			extension = ""
+
+			for character in filename:
+				if character == "." or trigger == True:
+					extension += character 
+					trigger = True 
+
+			if extension in extensionDict:
+				extensionDict[extension] += 1 
+			else:
+				extensionDict[extension] = 1 
+
+		return (extensionDict)
 
 
 im1 = ImageManip("c1.jpg")
@@ -62,6 +83,9 @@ im2 = ImageManip("c1.jpg")
 
 print(im1.checkAgainst(im2))
 print(im2.checkAgainst(im1))
+
+print(ImageManip.findExtensions(os.getcwd()))
+
 # full size: 0.11 alike 
 # 512,512 : 0.086  
 # 256,256 : 0.076 
