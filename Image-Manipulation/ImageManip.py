@@ -3,23 +3,28 @@ import os
 
 class ImageManip():
 
+	size = 8, 8 
+	count = 0 
 
-	def __init__(self, name):
+	def __init__(self, filename):
 
-		self.name = name 
+		self.name = filename #filename
+
 		self.xAxis = 0 
-		self.yAxis = 0 
+		self.yAxis = 0 	
 
-		self.size = 256 , 256 
+		self.makeReference(self.name, ImageManip.size) # creates self.2dArray 
 
-		self.makeReference(self.name, self.size) # creates self.2dArray 
-
-		pass 
+		ImageManip.count += 1 
 
 	def makeReference(self, name, size):
 		"""Makes 2d array of all the pixels. """
 		
-		control = Image.open(name) 
+		try:
+			control = Image.open(name) 
+		except OSError:
+			print("Whoops. Os error at file " + name)
+
 		control.thumbnail(size)
 
 		left, upper, right, lower = control.getbbox() 
@@ -56,9 +61,9 @@ class ImageManip():
 
 		return (round(likeliness/(xAxis*yAxis)*100,2)) 
 
-	def findExtensions(path):
-		"""Returns dictionary of most seen extensions in certain path."""
-		extensions = {}
+	def findCurrentExtensions(path):
+		"""Returns list of all extensions in certain path."""
+		extensionList = []
 
 		for filename in os.listdir(path): #returns list of all files in path 
 			
@@ -70,72 +75,184 @@ class ImageManip():
 					extension += character 
 					trigger = True 
 
-			if extension in extensions:
-				extensions[extension] += 1 
-			elif extension != "":
-				extensions[extension] = 1 
+			if (extension not in extensionList) and (extension != ""):
+				extensionList.append(extension)
 
-		return (extensions)
+		return extensionList
+
+	def findAllExtensions(path):
+		"""Finds all extensions in path and subdirectories, returns list. """
+		extensionList = [] 
+
+		for root, dirs, files in os.walk(path):
+			for element in ImageManip.findCurrentExtensions(root):
+				if element not in extensionList:
+					extensionList.append(element)
+
+		return extensionList
 
 	def filterExtensions(extensions):
-		
-		for key in extensions:
-			print(key)
-		
-		keyNumber = int(input("How many keys do you want to have?"))
-		futureKeys = [] 
 
-		for i in range(keyNumber):
-			futureKeys.append(input(":"))
+		futureKeys = [] 
+		print("Choose extensions:")
+		while True:
+			userInput = input("")
+			if userInput == "stop":
+				break
+			futureKeys.append(userInput) 
 
 		return futureKeys
 
+	def findSubdirectories(path):
+		"""Finds all subDirs from path. Returns their path in a list."""
+		directories = [] 
+
+		for root, dirs, files in os.walk(path):
+			for directory in dirs: 
+				directories.append(os.path.join(root,directory))
+
+		return directories 
+
+	def findFilenames(path, extensions):
+		"""Finds all filenames with the extensions we want.
+		Returns a dictionary, with the key being the directory."""
+		filenames = {} 
+
+		for root, dirs, files in os.walk(path):
+			firstTime = True 
+
+			for filename in files:
+				for ext in extensions:
+					
+					if ext in filename:				
+						if firstTime == True:
+							filenames[root] = [] 
+
+						filenames[root].append(filename)
+
+						firstTime = False  
+		return filenames 
+
+	def saveAllArrays(filenamesDict):
+		dictArrays = {} 
+		count = 0
+
+		for path in filenamesDict:
+			os.chdir(path)
+
+			filenames = filenamesDict[path]
+
+			for filename in filenames:
+				"""
+				try: 
+					referenceImage = ImageManip(filename)
+					dictArrays[os.path.join(path, filename)] = referenceImage.controlPixels 
+				except UnboundLocalError: 
+					print("File behaved weirdly. Skipping it.")
+				"""
+				try: 
+					exec("im" + str(count) + " = ImageManip(filename)")
+					dictArrays[os.path.join(path,filename)] = eval("im" + str(count))
+				except UnboundLocalError:
+					print("File behaved weirdly. Skipping it.")
+
+				count += 1 
+
+				print (str(round(count / 500 * 100)) + str("%"))
+
+			if count > 1000: 
+				break
+			
+		return dictArrays
+
+	def compareAllArrays(dictArrays):
+		keyOffset = 0 
+		progress = 0 
+		print("Ready to compare " + str(ImageManip.count) + " objects?")
+		input("")
+		duplicatesDict = {} 
+
+		for primaryKey in dictArrays:
+			progress += 1 
+			print(str(round(progress / len(dictArrays) * 100)) + str("%") ) 
+			keyOffset += 1 #keeps track of how far along we are, we save N/2 cpu 
+			i = keyOffset
+
+			for secondKey in dictArrays:
+				if i > 0: #while we're behind, do nothing 
+					i -= 1 
+				else:
+					im1 = dictArrays[primaryKey]
+					im2 = dictArrays[secondKey]
+					if im1.checkAgainst(im2) > 70:
+						if os.path.join(primaryKey,im1.name) in duplicatesDict:
+							duplicatesDict[os.path.join(primaryKey,im1.name)].append(os.path.join(secondKey,im2.name))
+						else: 
+							duplicatesDict[os.path.join(primaryKey,im1.name)] = [os.path.join(secondKey,im2.name)]
+
+		return duplicatesDict
 
 
-	def findFiles(path, extensions):
-		"""Find all files with required extension in path, and all subdirectories"""
-		result = [] 
-
-		for filename in os.listdir(path):
-			for key in extensions:
-				if key in filename:
-					result.append(filename)
-
-		return (result)
 
 
+path = "/media/removable/Seagate Expansion Drive/Asus Laptop/Chestii"
 
+extensionsList = ["jpg"]
 
-im1 = ImageManip("c1.jpg")
-im2 = ImageManip("c1.jpg")
+filenamesDict = ImageManip.findFilenames(path,extensionsList)
 
-print(im1.checkAgainst(im2))
-print(im2.checkAgainst(im1))
+#print(filenamesDict)
 
+dictArrays = ImageManip.saveAllArrays(filenamesDict)
 
-#extensions = ImageManip.filterExtensions(extensions)
+duplicatesDict = ImageManip.compareAllArrays(dictArrays)
 
-#print(ImageManip.findFiles("/root/" , extensions))
+fileCount = 0 
+duplicateCount = 0
 
-path = "/home/sergiu/Project-Archive"
+for key in duplicatesDict:
+	fileCount += 1 
+	for duplicate in duplicatesDict[key]:
+		duplicateCount += 1 
 
-directories = [] 	
+print("Duplicates: " + str(duplicateCount+fileCount))
+print("We can reduce them to: " + str(fileCount))
+print("Total files: " + str(ImageManip.count))
+print("Possible memory save: " + str((duplicateCount -fileCount) / (ImageManip.count) * 100) + "%")
+"""
+copyDictionaries = {} 
 
-for root, dirs, files in os.walk(path):
-	for directory in dirs:
-		directories.append(os.path.join(root,directory))
+for path in filenamesDict:
 
-extensions = {}
+	os.chdir(path)
 
-for path in directories:
-	for key in ImageManip.findExtensions(path):
-		if key in extensions:
-			extensions[key] += 1 
-		else:
-			extensions[key] = 1 
+	filenames = filenamesDict[path] 
 
-print(extensions)
+	for i in range(len(filenames)):
 
+		referenceImage = ImageManip(filenames[i])
+		count = 0
+		print(filenames[i])
+
+		for j in range(i+1,len(filenames)): 
+			comparedImage = ImageManip(filenames[j])
+
+			percentage = referenceImage.checkAgainst(comparedImage)
+
+			#print(filenames[i] + " and " + filenames[j] + " " + str(percentage) + "%") 
+
+			if percentage == 100:
+				if filenames[i] in copyDictionaries:
+					copyDictionaries[filenames[i]].append(filenames[j])
+					count += 1  
+				else:
+					copyDictionaries[filenames[i]] = [filenames[j]]
+
+		print(count)			
+		if count > 0: 
+			print(copyDictionaries)
+		
+"""
 
 # full size: 0.11 alike 
 # 512,512 : 0.086  
@@ -143,3 +260,19 @@ print(extensions)
 # 128,128 : 0.022 alike 
 # 64, 64  : 0.00 
 # 96,96   : 0.039 alike 
+
+#Iteration 1, no tweaks:
+# 1380 files in 90s - 1 dp
+# 1268 files in 60s - 5 dp 
+# 1053 files in 41s - 123 dp
+# 1115 files in 66s - 2dp
+# 1015 files in 67s - 4 dp
+# 1549 files in 80s - 206 dp
+# 1033 files in 40s - 201 dp
+# 1026 files in 40s - 14 dp
+# 1023 files in 45s - 205 dp
+# 1155 files in 36s - 497 dp 
+
+# average files: 1160
+# average speed: 56s  
+# over 10 tests 
