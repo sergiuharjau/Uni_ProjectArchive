@@ -3,8 +3,10 @@ import os
 
 class ImageManip():
 
-	size = 8, 8 
+	size = 24, 24 
+	# 16,16       446 duplicates 
 	count = 0 
+	# 8,8         417 duplicates 
 
 	def __init__(self, filename):
 
@@ -126,133 +128,118 @@ class ImageManip():
 					
 					if ext in filename:				
 						if firstTime == True:
-							filenames[root] = [] 
+							filenames[root] = [] #root, which is this directory's path  
 
 						filenames[root].append(filename)
 
 						firstTime = False  
 		return filenames 
 
-	def saveAllArrays(filenamesDict):
-		dictArrays = {} 
-		count = 0
+	def createAllObjects(filenamesDict):
+		listElems = [] 
+		variableCount = 0
 
 		for path in filenamesDict:
-			os.chdir(path)
+		#	os.chdir(path)  #not needed 
 
-			filenames = filenamesDict[path]
+			filenames = filenamesDict[path] # gets list of all file names in current directory 
 
-			for filename in filenames:
-				"""
+			for filename in filenames: # work with each file name one by one 
 				try: 
-					referenceImage = ImageManip(filename)
-					dictArrays[os.path.join(path, filename)] = referenceImage.controlPixels 
-				except UnboundLocalError: 
-					print("File behaved weirdly. Skipping it.")
-				"""
-				try: 
-					exec("im" + str(count) + " = ImageManip(filename)")
-					dictArrays[os.path.join(path,filename)] = eval("im" + str(count))
+					exec("im" + str(variableCount) + " = ImageManip(os.path.join(path,filename))") 
+						# makes sure we have a different variable name for every Class object 
+				#	dictElems[os.path.join(path,filename)] = eval("im" + str(count))
+					listElems.append(eval("im" + str(variableCount))) #trying a list 
+						# every object is saved in a dict with the path(inc filename) as a key 
 				except UnboundLocalError:
 					print("File behaved weirdly. Skipping it.")
 
-				count += 1 
+				variableCount += 1 
 
-				print (str(round(count / 500 * 100)) + str("%"))
-
-			if count > 1000: 
-				break
+				#print ("Creating all objects: " + str(round(variableCount / 1000 * 100)) + str("%"))
+					#shows progress  
+		#	if variableCount > 500: 
+		#		break #usually stops at the end of all subdirectories 
 			
-		return dictArrays
+		return listElems
 
-	def compareAllArrays(dictArrays):
-		keyOffset = 0 
-		progress = 0 
+	def compareAllObjects(listObjects):
+		"""Applies checkAgainst() to all permutations of objects. """
+
 		print("Ready to compare " + str(ImageManip.count) + " objects?")
-		input("")
+	
+		keyOffset = 0 
+		progress = 0
 		duplicatesDict = {} 
 
-		for primaryKey in dictArrays:
-			progress += 1 
-			print(str(round(progress / len(dictArrays) * 100)) + str("%") ) 
-			keyOffset += 1 #keeps track of how far along we are, we save N/2 cpu 
-			i = keyOffset
+		#for primaryKey in dictArrays:
 
-			for secondKey in dictArrays:
-				if i > 0: #while we're behind, do nothing 
-					i -= 1 
+		for primaryElement in listObjects: 
+
+			progress += 1 
+			print(str(round(progress / len(listObjects) * 100)) + str("%") ) 
+			
+			keyOffset += 1 #keeps track of how far along we are, we save N/2 cpu 
+			behindCheck = keyOffset
+
+		#	for secondKey in dictArrays:
+			for secondaryElement in listObjects:
+
+				if behindCheck > 0: #while we're behind, do nothing 
+					behindCheck -= 1 
 				else:
-					im1 = dictArrays[primaryKey]
-					im2 = dictArrays[secondKey]
+					im1 = primaryElement
+					im2 = secondaryElement
+
 					if im1.checkAgainst(im2) > 70:
-						if os.path.join(primaryKey,im1.name) in duplicatesDict:
-							duplicatesDict[os.path.join(primaryKey,im1.name)].append(os.path.join(secondKey,im2.name))
+						if im1.name in duplicatesDict:
+							duplicatesDict[im1.name].append(im2.name)
 						else: 
-							duplicatesDict[os.path.join(primaryKey,im1.name)] = [os.path.join(secondKey,im2.name)]
+							duplicatesDict[im1.name] = [im2.name]
+						#print(im1.name + " egal cu " + im2.name)
+						#input("")
 
 		return duplicatesDict
 
 
 
+def TestProgram():
+	path = "/media/removable/Seagate Expansion Drive/Asus Laptop/Chestii"
 
-path = "/media/removable/Seagate Expansion Drive/Asus Laptop/Chestii"
+	extensionsList = ["jpg"]
 
-extensionsList = ["jpg"]
+	filenamesDict = ImageManip.findFilenames(path,extensionsList)
 
-filenamesDict = ImageManip.findFilenames(path,extensionsList)
+	#print(filenamesDict)
 
-#print(filenamesDict)
+	dictArrays = ImageManip.createAllObjects(filenamesDict)
 
-dictArrays = ImageManip.saveAllArrays(filenamesDict)
+	duplicatesDict = ImageManip.compareAllObjects(dictArrays)
 
-duplicatesDict = ImageManip.compareAllArrays(dictArrays)
+	fileCount = 0 
+	duplicateCount = 0
 
-fileCount = 0 
-duplicateCount = 0
+	for key in duplicatesDict:
+		fileCount += 1 
+		for duplicate in duplicatesDict[key]:
+			duplicateCount += 1 
 
-for key in duplicatesDict:
-	fileCount += 1 
-	for duplicate in duplicatesDict[key]:
-		duplicateCount += 1 
+	print("Duplicates: " + str(duplicateCount+fileCount))
+	print("We can reduce them to: " + str(fileCount))
+	print("Total files: " + str(ImageManip.count))
+	memorySave = (duplicateCount-fileCount) / (ImageManip.count) * 100
+	print("Possible memory save: " + str(round(memorySave,2)) + "%")
 
-print("Duplicates: " + str(duplicateCount+fileCount))
-print("We can reduce them to: " + str(fileCount))
-print("Total files: " + str(ImageManip.count))
-print("Possible memory save: " + str((duplicateCount -fileCount) / (ImageManip.count) * 100) + "%")
-"""
-copyDictionaries = {} 
+	return (ImageManip.count)
 
-for path in filenamesDict:
+testSize = 1
+totalFiles = 0 
 
-	os.chdir(path)
+for i in range(testSize):
+	print("\n\n\n\nTests Left " + str(testSize - i)) 
+	totalFiles += TestProgram() 
 
-	filenames = filenamesDict[path] 
-
-	for i in range(len(filenames)):
-
-		referenceImage = ImageManip(filenames[i])
-		count = 0
-		print(filenames[i])
-
-		for j in range(i+1,len(filenames)): 
-			comparedImage = ImageManip(filenames[j])
-
-			percentage = referenceImage.checkAgainst(comparedImage)
-
-			#print(filenames[i] + " and " + filenames[j] + " " + str(percentage) + "%") 
-
-			if percentage == 100:
-				if filenames[i] in copyDictionaries:
-					copyDictionaries[filenames[i]].append(filenames[j])
-					count += 1  
-				else:
-					copyDictionaries[filenames[i]] = [filenames[j]]
-
-		print(count)			
-		if count > 0: 
-			print(copyDictionaries)
-		
-"""
+print("Files tested: " + str(totalFiles))
 
 # full size: 0.11 alike 
 # 512,512 : 0.086  
@@ -261,7 +248,7 @@ for path in filenamesDict:
 # 64, 64  : 0.00 
 # 96,96   : 0.039 alike 
 
-#Iteration 1, no tweaks:
+#Iteration 1, no tweaks, size 8,8:
 # 1380 files in 90s - 1 dp
 # 1268 files in 60s - 5 dp 
 # 1053 files in 41s - 123 dp
@@ -274,5 +261,12 @@ for path in filenamesDict:
 # 1155 files in 36s - 497 dp 
 
 # average files: 1160
-# average speed: 56s  
+# average time: 56s  
+# files/second: ~20 files /s  
 # over 10 tests 
+
+#Iteration 2, changed dict to list, size 8,8:
+# total files : 14310 
+# total time  : 700s
+# files/second: 20 files /s  lol 
+
