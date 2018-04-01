@@ -7,7 +7,7 @@ class ImageManip():
 	# 16,16       446 duplicates 
 	count = 0 
 	# 8,8         417 duplicates 
-
+	clusterSize = 3 
 	#9,9 smart reference: 576 total dupes, reduced to 207
 
 	def __init__(self, filename):
@@ -61,8 +61,8 @@ class ImageManip():
 
 		likeliness = 0
 
-		for i in range(3):
-			for j in range(3):
+		for i in range(clusterSize):
+			for j in range(clusterSize):
 				if self.controlPixels[i][j] == other.controlPixels[i][j]:
 					likeliness += 1 
 
@@ -119,41 +119,41 @@ class ImageManip():
 				directories.append(os.path.join(root,directory))
 
 		return directories 
-
+	
 	def findFilenames(path, extensions):
 		"""Finds all filenames with the extensions we want.
 		Returns a dictionary, with the key being the directory."""
-		filenames = [] 
+		filenames = {} 
 
 		for root, dirs, files in os.walk(path):
-
-			for filename in files: #look into changing this into lists, not dicts 
-				for ext in extensions:
-					
-					if ext in filename:
-						filenames.append(os.path.join(root, filename))
-
+			filenames[root] = files 
+			
 		return filenames 
 
-	def createAllObjects(filenamesList):
-		listElems = [] 
+	def createAllObjects(filenamesDict):
+		dictElems = {}
 		variableCount = 0
 
-		for filename in filenamesList:
-			try:
-				exec("im" + str(variableCount) + " = ImageManip(filename)")
-				listElems.append(eval("im" + str(variableCount)))
-			except UnboundLocalError:
-				print("File behaved weirdly. Skipping it.")
+		for path in filenamesDict:
+					# gets list of all file names in current directory 
+			for filename in filenamesDict[path]: # work with each file name one by one 
+				try: 
+					exec("im" + str(variableCount) + " = ImageManip(os.path.join(path,filename))") 
+						# makes sure we have a different variable name for every Class object 
+					dictElems[os.path.join(path,filename)] = eval("im" + str(count))
+						# every object is saved in a dict with the path(inc filename) as a key 
+				except UnboundLocalError:
+					print("File behaved weirdly. Skipping it.")
 
-			variableCount += 1 
+				variableCount += 1 
 
-			print("Creating all objects: " + str(variableCount))
+				print ("Creating all objects: " + str(variableCount))
+					#shows progress  
+		#	if variableCount > 500: 
+		#		break #usually stops at the end of all subdirectories 
+			
+		return dictElems
 
-		#	if variableCount == 1000:
-		#		break 
-
-		return listElems
 
 	def compareAllObjects(listObjects):
 		"""Applies checkAgainst() to all permutations of objects. """
