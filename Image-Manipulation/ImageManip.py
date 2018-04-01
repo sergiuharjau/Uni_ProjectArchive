@@ -3,37 +3,52 @@ import os
 
 class ImageManip():
 
-	size = 32, 32 
+	size = 256, 256 
 	# 16,16       446 duplicates 
 	count = 0 
 	# 8,8         417 duplicates 
-	clusterSize = 3 
+	clusterSize = 2
 	#9,9 smart reference: 576 total dupes, reduced to 207
-
+	offSet = 50
+	# c = 3, size = 32,32, found 445 duplicates 
+	# c = 3, size = 64,64, found 470 duplicates
+	# 2 * c = 3, size = 512, 512, found 478 dupes  
+	# 2 * c = 5, size = 512, 512, found 483 
+	# 2 * c = 10, size = 512, 512, found 464 
+	# 2 * c = 2, size = 256, 256, found 449 
 	def __init__(self, filename):
 
 		self.name = filename #filename	
 
-		self.makeSmartReference(self.name) # creates self.2dArray 
+		self.makeSmartReference(self.name, ImageManip.clusterSize) # creates self.2dArray 
 
 		ImageManip.count += 1 
 
-	def makeSmartReference(self, name):
+	def makeSmartReference(self, name, clusterSize):
+	
 		try:		
 			control = Image.open(name)
 		except OSError:
 			print("Whoops. Os error at file " + name )
 
+		control.thumbnail(ImageManip.size)
+		
 		left, upper, right, lower = control.getbbox() 
 
-		lookAtX = int(right / 2 )
-		lookAtY = int(lower / 2 )
+		lookAtX = int( (right - clusterSize) / 2 )
+		lookAtY = int( (lower - clusterSize) / 2 )
 
-		self.controlPixels = [[None] * 3 for i in range(3)]
+		self.controlPixels1 = [[None] * clusterSize for i in range(clusterSize)]
 
-		for i in range(lookAtX, lookAtX+3):
-			for j in range(lookAtY, lookAtY+3):
-				self.controlPixels[ i - lookAtX ] [ j - lookAtY ] = control.getpixel((i,j))
+		for i in range(lookAtX, lookAtX+clusterSize):
+			for j in range(lookAtY, lookAtY+clusterSize):
+				self.controlPixels1[ i - lookAtX ] [ j - lookAtY ] = control.getpixel((i,j))
+
+		self.controlPixels2 = [[None] * clusterSize for i in range(clusterSize)]
+		for i in range(lookAtX+ImageManip.offSet , lookAtX+clusterSize+ImageManip.offSet):
+			for j in range(lookAtY+ImageManip.offSet, lookAtY+clusterSize+ImageManip.offSet):
+				self.controlPixels2[ i - (lookAtX +ImageManip.offSet) ] [ j - (lookAtY +ImageManip.offSet )] = control.getpixel((i,j))
+
 
 	def makeReference(self, name, size):
 		"""Makes 2d array of all the pixels. """
@@ -61,12 +76,14 @@ class ImageManip():
 
 		likeliness = 0
 
-		for i in range(clusterSize):
-			for j in range(clusterSize):
-				if self.controlPixels[i][j] == other.controlPixels[i][j]:
-					likeliness += 1 
+		for i in range(ImageManip.clusterSize):
+			for j in range(ImageManip.clusterSize):
+				if self.controlPixels1[i][j] == other.controlPixels1[i][j]:
+					likeliness += 0.5
+				if self.controlPixels2[i][j] == other.controlPixels2[i][j]:
+					likeliness += 0.5 
 
-		return (round(likeliness/(9)*100,2)) 
+		return (round(likeliness/(ImageManip.clusterSize**2)*100,2)) 
 
 	def findCurrentExtensions(path):
 		"""Returns list of all extensions in certain path."""
@@ -126,12 +143,18 @@ class ImageManip():
 		filenames = {} 
 
 		for root, dirs, files in os.walk(path):
-			filenames[root] = files 
+			goodFiles = [] 
+			for filename in files: 
+				for ext in extensions:
+					if ext in filename: 
+						goodFiles.append(filename)
+
+			filenames[root] = goodFiles
 			
 		return filenames 
 
 	def createAllObjects(filenamesDict):
-		dictElems = {}
+		listElems = []
 		variableCount = 0
 
 		for path in filenamesDict:
@@ -140,7 +163,7 @@ class ImageManip():
 				try: 
 					exec("im" + str(variableCount) + " = ImageManip(os.path.join(path,filename))") 
 						# makes sure we have a different variable name for every Class object 
-					dictElems[os.path.join(path,filename)] = eval("im" + str(count))
+					listElems.append(eval("im" + str(variableCount)))
 						# every object is saved in a dict with the path(inc filename) as a key 
 				except UnboundLocalError:
 					print("File behaved weirdly. Skipping it.")
@@ -149,10 +172,10 @@ class ImageManip():
 
 				print ("Creating all objects: " + str(variableCount))
 					#shows progress  
-		#	if variableCount > 500: 
-		#		break #usually stops at the end of all subdirectories 
+		#		if variableCount > 500: 
+		#			break #usually stops at the end of all subdirectories 
 			
-		return dictElems
+		return listElems
 
 
 	def compareAllObjects(listObjects):
@@ -220,18 +243,18 @@ def TestSmartReference():
 
 	duplicatesDict = ImageManip.compareAllObjects(objectList)
 
-	fileCount = 0 
+	uniqueFileCount = 0 
 	duplicateCount = 0
 
 	for key in duplicatesDict:
-		fileCount += 1 
+		uniqueFileCount += 1 
 		for duplicate in duplicatesDict[key]:
 			duplicateCount += 1 
 
-	print("Duplicates: " + str(duplicateCount+fileCount))
-	print("We can reduce them to: " + str(fileCount))
+	print("Duplicates: " + str(duplicateCount+uniqueFileCount))
+	print("We can reduce them to: " + str(uniqueFileCount))
 	print("Total files: " + str(ImageManip.count))
-	memorySave = (duplicateCount-fileCount) / (ImageManip.count) * 100
+	memorySave = (duplicateCount-uniqueFileCount) / (ImageManip.count) * 100
 	print("Possible memory save: " + str(round(memorySave,2)) + "%")
 
 
