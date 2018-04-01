@@ -3,25 +3,40 @@ import os
 
 class ImageManip():
 
-	size = 24, 24 
+	size = 32, 32 
 	# 16,16       446 duplicates 
 	count = 0 
 	# 8,8         417 duplicates 
 
+	#9,9 smart reference: 576 total dupes, reduced to 207
+
 	def __init__(self, filename):
 
-		self.name = filename #filename
+		self.name = filename #filename	
 
-		self.xAxis = 0 
-		self.yAxis = 0 	
-
-		self.makeReference(self.name, ImageManip.size) # creates self.2dArray 
+		self.makeSmartReference(self.name) # creates self.2dArray 
 
 		ImageManip.count += 1 
 
+	def makeSmartReference(self, name):
+		try:		
+			control = Image.open(name)
+		except OSError:
+			print("Whoops. Os error at file " + name )
+
+		left, upper, right, lower = control.getbbox() 
+
+		lookAtX = int(right / 2 )
+		lookAtY = int(lower / 2 )
+
+		self.controlPixels = [[None] * 3 for i in range(3)]
+
+		for i in range(lookAtX, lookAtX+3):
+			for j in range(lookAtY, lookAtY+3):
+				self.controlPixels[ i - lookAtX ] [ j - lookAtY ] = control.getpixel((i,j))
+
 	def makeReference(self, name, size):
 		"""Makes 2d array of all the pixels. """
-		
 		try:
 			control = Image.open(name) 
 		except OSError:
@@ -44,24 +59,14 @@ class ImageManip():
 
 	def checkAgainst(self, other):
 
-		if self.xAxis < other.xAxis:
-			xAxis = self.xAxis 
-		else:
-			xAxis = other.xAxis 
-
-		if self.yAxis < other.yAxis:
-			yAxis = self.yAxis
-		else:
-			yAxis = other.yAxis 
-
 		likeliness = 0
 
-		for i in range(xAxis):
-			for j in range(yAxis):
+		for i in range(3):
+			for j in range(3):
 				if self.controlPixels[i][j] == other.controlPixels[i][j]:
 					likeliness += 1 
 
-		return (round(likeliness/(xAxis*yAxis)*100,2)) 
+		return (round(likeliness/(9)*100,2)) 
 
 	def findCurrentExtensions(path):
 		"""Returns list of all extensions in certain path."""
@@ -118,56 +123,43 @@ class ImageManip():
 	def findFilenames(path, extensions):
 		"""Finds all filenames with the extensions we want.
 		Returns a dictionary, with the key being the directory."""
-		filenames = {} 
+		filenames = [] 
 
 		for root, dirs, files in os.walk(path):
-			firstTime = True 
 
-			for filename in files:
+			for filename in files: #look into changing this into lists, not dicts 
 				for ext in extensions:
 					
-					if ext in filename:				
-						if firstTime == True:
-							filenames[root] = [] #root, which is this directory's path  
+					if ext in filename:
+						filenames.append(os.path.join(root, filename))
 
-						filenames[root].append(filename)
-
-						firstTime = False  
 		return filenames 
 
-	def createAllObjects(filenamesDict):
+	def createAllObjects(filenamesList):
 		listElems = [] 
 		variableCount = 0
 
-		for path in filenamesDict:
-		#	os.chdir(path)  #not needed 
+		for filename in filenamesList:
+			try:
+				exec("im" + str(variableCount) + " = ImageManip(filename)")
+				listElems.append(eval("im" + str(variableCount)))
+			except UnboundLocalError:
+				print("File behaved weirdly. Skipping it.")
 
-			filenames = filenamesDict[path] # gets list of all file names in current directory 
+			variableCount += 1 
 
-			for filename in filenames: # work with each file name one by one 
-				try: 
-					exec("im" + str(variableCount) + " = ImageManip(os.path.join(path,filename))") 
-						# makes sure we have a different variable name for every Class object 
-				#	dictElems[os.path.join(path,filename)] = eval("im" + str(count))
-					listElems.append(eval("im" + str(variableCount))) #trying a list 
-						# every object is saved in a dict with the path(inc filename) as a key 
-				except UnboundLocalError:
-					print("File behaved weirdly. Skipping it.")
+			print("Creating all objects: " + str(variableCount))
 
-				variableCount += 1 
+		#	if variableCount == 1000:
+		#		break 
 
-				#print ("Creating all objects: " + str(round(variableCount / 1000 * 100)) + str("%"))
-					#shows progress  
-		#	if variableCount > 500: 
-		#		break #usually stops at the end of all subdirectories 
-			
 		return listElems
 
 	def compareAllObjects(listObjects):
 		"""Applies checkAgainst() to all permutations of objects. """
 
-		print("Ready to compare " + str(ImageManip.count) + " objects?")
-	
+		print("Starting Comparison") 
+
 		keyOffset = 0 
 		progress = 0
 		duplicatesDict = {} 
@@ -191,7 +183,7 @@ class ImageManip():
 					im1 = primaryElement
 					im2 = secondaryElement
 
-					if im1.checkAgainst(im2) > 70:
+					if im1.checkAgainst(im2) >= 70:
 						if im1.name in duplicatesDict:
 							duplicatesDict[im1.name].append(im2.name)
 						else: 
@@ -201,20 +193,32 @@ class ImageManip():
 
 		return duplicatesDict
 
+	def checkEvenness(objectList):
+		evenX = 0 
+		evenY = 0 
+		for object in objectList:
+			if object.xAxis % 2 == 0:
+				evenX += 1 
+			if object.yAxis % 2 == 0:
+				evenY += 1 
+
+		print("All elements: " + str(ImageManip.count))
+		print("Elements with even xAxis: " + str(evenX))
+		print("Elements with even yAxis: " + str(evenY))
+
+		return None 
 
 
-def TestProgram():
+def TestSmartReference():
 	path = "/media/removable/Seagate Expansion Drive/Asus Laptop/Chestii"
 
-	extensionsList = ["jpg"]
+	extensionList = ["jpg"]
 
-	filenamesDict = ImageManip.findFilenames(path,extensionsList)
-
+	filenamesDict = ImageManip.findFilenames(path,extensionList)
 	#print(filenamesDict)
+	objectList = ImageManip.createAllObjects(filenamesDict)
 
-	dictArrays = ImageManip.createAllObjects(filenamesDict)
-
-	duplicatesDict = ImageManip.compareAllObjects(dictArrays)
+	duplicatesDict = ImageManip.compareAllObjects(objectList)
 
 	fileCount = 0 
 	duplicateCount = 0
@@ -230,16 +234,8 @@ def TestProgram():
 	memorySave = (duplicateCount-fileCount) / (ImageManip.count) * 100
 	print("Possible memory save: " + str(round(memorySave,2)) + "%")
 
-	return (ImageManip.count)
 
-testSize = 1
-totalFiles = 0 
-
-for i in range(testSize):
-	print("\n\n\n\nTests Left " + str(testSize - i)) 
-	totalFiles += TestProgram() 
-
-print("Files tested: " + str(totalFiles))
+TestSmartReference()
 
 # full size: 0.11 alike 
 # 512,512 : 0.086  
