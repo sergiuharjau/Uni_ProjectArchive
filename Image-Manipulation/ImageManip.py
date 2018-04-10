@@ -2,29 +2,24 @@ from PIL import Image
 import os 
 
 class ImageManip():
+#I've had better class names 
+	size = 64, 64 #reduce every image to approx 64,64 pixels
 
-	size = 256, 256 
-	# 16,16       446 duplicates 
 	count = 0 
-	# 8,8         417 duplicates 
-	clusterSize = 2
-	#9,9 smart reference: 576 total dupes, reduced to 207
-	offSet = 50
-	# c = 3, size = 32,32, found 445 duplicates 
-	# c = 3, size = 64,64, found 470 duplicates
-	# 2 * c = 3, size = 512, 512, found 478 dupes  
-	# 2 * c = 5, size = 512, 512, found 483 
-	# 2 * c = 10, size = 512, 512, found 464 
-	# 2 * c = 2, size = 256, 256, found 449 
+
+	clusterSize = 2 #using clusters of 2*2 pixels 
+
+	offSet = 4 #3 clusters, offset by 4 pixels 
+
 	def __init__(self, filename):
 
 		self.name = filename #filename	
 
-		self.makeSmartReference(self.name, ImageManip.clusterSize) # creates self.2dArray 
+		self.makeSmartReference(self.name) # creates self.2dArray 
 
 		ImageManip.count += 1 
 
-	def makeSmartReference(self, name, clusterSize):
+	def makeSmartReference(self, name):
 	
 		try:		
 			control = Image.open(name)
@@ -35,20 +30,32 @@ class ImageManip():
 		
 		left, upper, right, lower = control.getbbox() 
 
-		lookAtX = int( (right - clusterSize) / 2 )
-		lookAtY = int( (lower - clusterSize) / 2 )
+		lookAtX = int( (right - ImageManip.clusterSize) / 2 ) 
+		lookAtY = int( (lower - ImageManip.clusterSize) / 2 )
+				#fancy maths to make sure we're not off bounds 
+		self.constructArray(lookAtX, lookAtY, control, 1)
 
-		self.controlPixels1 = [[None] * clusterSize for i in range(clusterSize)]
+		lookAtX += ImageManip.offSet
+		lookAtY += ImageManip.offSet
 
-		for i in range(lookAtX, lookAtX+clusterSize):
-			for j in range(lookAtY, lookAtY+clusterSize):
-				self.controlPixels1[ i - lookAtX ] [ j - lookAtY ] = control.getpixel((i,j))
+		self.constructArray(lookAtX, lookAtY, control, 2)
 
-		self.controlPixels2 = [[None] * clusterSize for i in range(clusterSize)]
-		for i in range(lookAtX+ImageManip.offSet , lookAtX+clusterSize+ImageManip.offSet):
-			for j in range(lookAtY+ImageManip.offSet, lookAtY+clusterSize+ImageManip.offSet):
-				self.controlPixels2[ i - (lookAtX +ImageManip.offSet) ] [ j - (lookAtY +ImageManip.offSet )] = control.getpixel((i,j))
+		lookAtX -= 2 * ImageManip.offSet # so we're 1 offSet behind the original lookAtX 
+		lookAtY -= 2 * ImageManip.offSet
 
+		self.constructArray(lookAtX , lookAtY, control, 3)
+
+	def constructArray(self, lookAtX, lookAtY, control, integer):
+		"""Takes as input the necessary variables, and constructs a self. 2Darray"""
+		exec("self.controlPixels" + str(integer) + " = [[None] * ImageManip.clusterSize for i in range(ImageManip.clusterSize)]")
+
+		for i in range(lookAtX, lookAtX+ImageManip.clusterSize):
+			for j in range(lookAtY, lookAtY+ImageManip.clusterSize):
+				try:
+					exec("self.controlPixels"+ str(integer) + "[ i - lookAtX ] [ j - lookAtY ] = control.getpixel((i,j))")
+				except IndexError:
+					print("This image: " + self.name + " is way too tiny.")
+					input("")
 
 	def makeReference(self, name, size):
 		"""Makes 2d array of all the pixels. """
@@ -73,16 +80,17 @@ class ImageManip():
 		self.yAxis = lower 
 
 	def checkAgainst(self, other):
-
+		"""Functions that compares two objects"""
 		likeliness = 0
 
 		for i in range(ImageManip.clusterSize):
 			for j in range(ImageManip.clusterSize):
 				if self.controlPixels1[i][j] == other.controlPixels1[i][j]:
-					likeliness += 0.5
+					likeliness += 0.33
 				if self.controlPixels2[i][j] == other.controlPixels2[i][j]:
-					likeliness += 0.5 
-
+					likeliness += 0.33
+				if self.controlPixels3[i][j] == other.controlPixels3[i][j]:
+					likeliness += 0.33
 		return (round(likeliness/(ImageManip.clusterSize**2)*100,2)) 
 
 	def findCurrentExtensions(path):
@@ -116,7 +124,7 @@ class ImageManip():
 		return extensionList
 
 	def filterExtensions(extensions):
-
+		"""Filters extensions according to the user's needs."""
 		futureKeys = [] 
 		print("Choose extensions:")
 		while True:
@@ -126,16 +134,6 @@ class ImageManip():
 			futureKeys.append(userInput) 
 
 		return futureKeys
-
-	def findSubdirectories(path):
-		"""Finds all subDirs from path. Returns their path in a list."""
-		directories = [] 
-
-		for root, dirs, files in os.walk(path):
-			for directory in dirs: 
-				directories.append(os.path.join(root,directory))
-
-		return directories 
 	
 	def findFilenames(path, extensions):
 		"""Finds all filenames with the extensions we want.
@@ -172,8 +170,8 @@ class ImageManip():
 
 				print ("Creating all objects: " + str(variableCount))
 					#shows progress  
-		#		if variableCount > 500: 
-		#			break #usually stops at the end of all subdirectories 
+			#	if variableCount > 5000: 
+			#		break #usually stops at the end of all subdirectories 
 			
 		return listElems
 
@@ -187,8 +185,6 @@ class ImageManip():
 		progress = 0
 		duplicatesDict = {} 
 
-		#for primaryKey in dictArrays:
-
 		for primaryElement in listObjects: 
 
 			progress += 1 
@@ -197,7 +193,6 @@ class ImageManip():
 			keyOffset += 1 #keeps track of how far along we are, we save N/2 cpu 
 			behindCheck = keyOffset
 
-		#	for secondKey in dictArrays:
 			for secondaryElement in listObjects:
 
 				if behindCheck > 0: #while we're behind, do nothing 
@@ -206,7 +201,7 @@ class ImageManip():
 					im1 = primaryElement
 					im2 = secondaryElement
 
-					if im1.checkAgainst(im2) >= 70:
+					if im1.checkAgainst(im2) >= 90:
 						if im1.name in duplicatesDict:
 							duplicatesDict[im1.name].append(im2.name)
 						else: 
@@ -216,25 +211,10 @@ class ImageManip():
 
 		return duplicatesDict
 
-	def checkEvenness(objectList):
-		evenX = 0 
-		evenY = 0 
-		for object in objectList:
-			if object.xAxis % 2 == 0:
-				evenX += 1 
-			if object.yAxis % 2 == 0:
-				evenY += 1 
-
-		print("All elements: " + str(ImageManip.count))
-		print("Elements with even xAxis: " + str(evenX))
-		print("Elements with even yAxis: " + str(evenY))
-
-		return None 
-
 
 def TestSmartReference():
 	path = "/media/removable/Seagate Expansion Drive/Asus Laptop/Chestii"
-
+	
 	extensionList = ["jpg"]
 
 	filenamesDict = ImageManip.findFilenames(path,extensionList)
@@ -258,34 +238,5 @@ def TestSmartReference():
 	print("Possible memory save: " + str(round(memorySave,2)) + "%")
 
 
-TestSmartReference()
-
-# full size: 0.11 alike 
-# 512,512 : 0.086  
-# 256,256 : 0.076 
-# 128,128 : 0.022 alike 
-# 64, 64  : 0.00 
-# 96,96   : 0.039 alike 
-
-#Iteration 1, no tweaks, size 8,8:
-# 1380 files in 90s - 1 dp
-# 1268 files in 60s - 5 dp 
-# 1053 files in 41s - 123 dp
-# 1115 files in 66s - 2dp
-# 1015 files in 67s - 4 dp
-# 1549 files in 80s - 206 dp
-# 1033 files in 40s - 201 dp
-# 1026 files in 40s - 14 dp
-# 1023 files in 45s - 205 dp
-# 1155 files in 36s - 497 dp 
-
-# average files: 1160
-# average time: 56s  
-# files/second: ~20 files /s  
-# over 10 tests 
-
-#Iteration 2, changed dict to list, size 8,8:
-# total files : 14310 
-# total time  : 700s
-# files/second: 20 files /s  lol 
-
+if __name__ == "__main__":
+	TestSmartReference()
