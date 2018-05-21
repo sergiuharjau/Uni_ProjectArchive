@@ -1,7 +1,5 @@
 import urllib.request, json
 
-url = "http://maps.googleapis.com/maps/api/geocode/json?address="
-
 def sanitizeInput(city_raw):
     city_list = city_raw.split() 
     city = ""
@@ -12,26 +10,93 @@ def sanitizeInput(city_raw):
     
     return city 
 
-city1_raw = input ("First city: ")
-city2_raw = input ("Second city: ")
 
-city1 = sanitizeInput(city1_raw)
-city2 = sanitizeInput(city2_raw)
+def determineCities():
+    """Receives input from the user, returns said input as a list."""
+    
+    numberCities = int(input("How many cities? "))
+    
+    citiesList = [] 
+    
+    for i in range(numberCities):
+        citiesList.append(input("City " + str(i+1) + ": "))
+       
+    return citiesList
 
-c1_url = url + city1 + "&sensor=false"
-c2_url = url + city2 + "&sensor=false"
+def getCoordinates(city):
+    
+    url = "http://maps.googleapis.com/maps/api/geocode/json?address="
+    
+    city_url = url + city
+      
+    data = urllib.request.urlopen(city_url)
+   
+    results = json.loads(data.read().decode())["results"]
+    
+    if results == []:
+        print("Google API prevented us from getting: " + city[:len(city)-1])
+        return({"lat" : 0 , "lng" : 0})                    
 
-data1 = urllib.request.urlopen(c1_url)
-data2 = urllib.request.urlopen(c2_url)
+    coordinates = results[0]["geometry"]["location"]
 
-coordinates1 = json.loads(data1.read().decode())["results"][0]["geometry"]["location"]
-coordinates2 = json.loads(data2.read().decode())["results"][0]["geometry"]["location"]
-
-
-print(coordinates1)
-print(coordinates2)
-
-medianLAT = ( coordinates1["lat"] + coordinates2["lat"] ) / 2 
-medianLNG = ( coordinates1["lng"] + coordinates2["lng"]) / 2 
-
-print("Median Lat: %f \nMedian Lng: %f" % (medianLAT, medianLNG)) 
+    return coordinates 
+    
+def getMedian(allCoordinates):
+    
+    longitude = 0 
+    latitude = 0 
+    
+    for coordDict in allCoordinates:
+        longitude += coordDict["lng"]
+        latitude += coordDict["lat"]
+        
+    medianLng = longitude / len(allCoordinates)
+    medianLat = latitude / len(allCoordinates)
+    
+    return({"lat" : medianLat , "lng" : medianLng})
+    
+    
+    
+if __name__ == "__main__":
+    
+    citiesList = determineCities()
+    
+    sanitizedCities = [] 
+    
+    for city in citiesList:
+        sanitizedCities.append(sanitizeInput(city))
+    
+    allCoordinates = [] 
+    
+    for city in sanitizedCities:
+        allCoordinates.append(getCoordinates(city))
+    
+    median = getMedian(allCoordinates)
+    
+    googleURL = "https://www.google.co.uk/maps/place/"
+    
+    link = googleURL + str(median["lat"]) + "," + str(median["lng"]) + "/"
+    
+    print(link)
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
