@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "linen-autonomy-210122",
+  "private_key_id": "bdd3fd26a51bff9b8634d9c810fcf69c321092fb",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCuF2TNI+YHWoJp\n9wDUkejpwrwSPXB6jrjZlheYY+eHdpTQXZgKQF+zT31+/evyb7BP4wOLFf9dNFJ0\nxxD2Lp7b+KuWSr+C4CwwbMJTcNax3n3a/OPF8FuNwf7Tj5FrqSoePpuKAlE+6+wX\nntZ8OHYgzSoxnKO1lb+UJVsJw8nvKg9O2LbjF/RTcdqkhZXfpkgbstpaQdVXI7Z4\n6n7lGEB5o8yAUpG60l+4aV7Fra3AHkrSBHhHSlGDMM2oUIhdKsstjJw/3mGpl5Jm\n7FjBHqXTwB1e45+2p4qR2Sc51MQUAKf2xh3FEoCYRTDScZOc6QSkO+/Mf82l+CtB\nAZtEUR49AgMBAAECggEAUsbh0Z7Lndx93Reqx+g26IuE9GFNTaD2KNNyla2PJbyP\nBsIx7FHujypxQARJf8V2fo2xHh2QBge+WzNaD8xcEbjcEYKqK/ceW8oi3hztoLZr\nfkg3n2LpjW5cFckSeq/9TFM1jroKWpI/+H04e+k21eLnuJ5DwzAYXz8h2fND3ZkH\nww38itw7NXQSob7iNAqI695DE/9RlYfzhDNAZlA4ql671/79CfcuV2ykBzWmT1JW\nk2SxHVvFj7snwPHxZ7SvKA3VedNlBNidWvRReKfQ7gT8Nj5myfvZlCmqINfctd6g\nu8PUb8O89+OXqNRsOofhj5hogoRYX4yIJQ20mM2mqwKBgQDZn6n+sWg1MP3jVJXK\n9NTxRcI998lqoisbPVi3joAwo7ic1EUb0N+S1vP3C7Isk/m/78V99Ynr9WWcOx0y\nJzAGVoDsxEa51OUoInkTwFLRse+I5Wej/VvwWlI7iP7e/u6BJ2/cza19s2YCLS79\n03Jh/TEVHBFNGC2nvZL6bKPgiwKBgQDMyoVXKSYKsWaBMMe5HYp6jnUVHTM6KPhq\nwunrX72ePQAlTXJr/HBvEMuNBE3y3zfHhucCONXoteg2sAe061jlfVjryiwn8A6J\nC5llrwPV5DnCFGgnzcM0LuYlQUwEggXo9lBRDAemr1Hx6SVx8KY60Nu9JMLQ+3Dl\nWjemhwJNVwKBgQCCoiE9Tekr5NjCmYfBaO5aVnGfGRrC883EcDLNHLE+gUjUe2dw\npxVN49JWvaKat8j3ukpmrfm4tnnkKmgALx3Y8Bw8BCYgbveP/AGKJayRS6pqFqr7\n+Z4yzUUHj9jOq2EoDjBL7vrxtbrKG61VmJPU1lOcRFjuWlEtm9KamJRWuQKBgFVr\nhAK/HycGqALrHeOQ9tn34c5Ux7FStYuSkY+j96uxNgZZL4jrWtp43u6LBRhxEwse\nseyzWEYg2iM1eYF1STcv+Y8gXRqrfuSa+fj371mgQJc7e9ZedTWm+kg/3D1lHqH1\nW7rykZ5tMnj9Dqlf/3Y49+8FDl2tA4InB19moQcxAoGBAJgyu5P3uFfSSp0doTea\nhoMdNXYOb6iRj2P6WrpTIr0NHGyEX4dfLcPiQZixmh/RVN7rEsr7JCm1jiKk1DAU\niju7UlYSRtkWVBeB/64v6OZDU142UQ9SS10cw+aPYdSnmmZzZ3qo3/+cyB/6Nnvl\nZQ9l4GcdcCKb8iSFt5W85hQj\n-----END PRIVATE KEY-----\n",
+  "client_email": "spreadsheet-updater@linen-autonomy-210122.iam.gserviceaccount.com",
+  "client_id": "118329342931940666616",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://accounts.google.com/o/oauth2/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/spreadsheet-updater%40linen-autonomy-210122.iam.gserviceaccount.com"
+}
