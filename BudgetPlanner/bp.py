@@ -1,17 +1,25 @@
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
        
-class Budget:
-    rent = 150 
-    
+class Budget:  
     rentFund = 0 
     buffer = 0 
     holiday = 0 
     leisure = 0 
     
-    def __init__(self):
+    rent = 150 
+  
+    distributeB = 0.5
+    distributeH = 0.2   #must add up to 1
+    distributeL = 0.3
+    
+    minimumB = 70
+    minimumH = 7
+    minimumL = 15 
+    
+    def __init__(self, userInput):
         
-        self.initiateConnection() 
+        self.initiateConnection(userInput) 
         self.getPreviousFunds() 
         self.getSheetsInputs() 
       
@@ -26,7 +34,7 @@ class Budget:
 
         self.allowance = 20
 
-    def initiateConnection(self):
+    def initiateConnection(self, userInput):
         
         scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
         credentials = ServiceAccountCredentials.from_json_keyfile_name("Spreadsheet Updater-bdd3fd26a51b.json", scope)
@@ -34,8 +42,8 @@ class Budget:
 
         self.wks = gc.open("Budget Planner").sheet1 
         
-        self.weekRow = int(input("What week? ")) + 3  # Week 0 = Row 3 
-        self.weekNumber = self.weekRow - 3 
+        self.weekRow = userInput + 3  # Week 0 = Row 3 
+        self.weekNumber = userInput 
     
     def getPreviousFunds(self):
         
@@ -58,10 +66,10 @@ class Budget:
         
         #Outputs = D E F G 
         #          4 5 6 7 
-        self.wks.update_cell(self.weekRow + 1, 4, Budget.rentFund)
-        self.wks.update_cell(self.weekRow + 1, 5, Budget.buffer)
-        self.wks.update_cell(self.weekRow + 1, 6, Budget.holiday)
-        self.wks.update_cell(self.weekRow + 1, 7, Budget.leisure)
+        self.wks.update_cell(self.weekRow + 1, 4, round(Budget.rentFund,2))
+        self.wks.update_cell(self.weekRow + 1, 5, round(Budget.buffer,2))
+        self.wks.update_cell(self.weekRow + 1, 6, round(Budget.holiday,2))
+        self.wks.update_cell(self.weekRow + 1, 7, round(Budget.leisure,2))
         
     def moneyIN(self, money):
        
@@ -81,9 +89,9 @@ class Budget:
                     #print("Money left: " + str(money))
                     self.necPaid = self.necessities
                 #print("Distributing: " + str(money))
-                Budget.buffer += 0.5 * money 
-                self.holidayAdded += 0.2 * money 
-                self.leisureAdded += 0.3 * money 
+                Budget.buffer += Budget.distributeB * money 
+                self.holidayAdded += Budget.distributeH * money 
+                self.leisureAdded += Budget.distributeL * money 
                 
             else: 
                 #print("Paying it all to necessities. " + str(money))                
@@ -112,12 +120,12 @@ class Budget:
             self.moneyIN(payIN)
             Budget.buffer -= payIN
         
-        if self.holidayAdded < 7 and Budget.buffer > 70: 
-            Budget.buffer -= 7 - self.holidayAdded
-            self.holidayAdded = 7
-        if self.leisureAdded < 15 and Budget.buffer > 70:
-            Budget.buffer -= 15 - self.leisureAdded
-            self.leisureAdded = 15
+        if self.holidayAdded < Budget.minimumH and Budget.buffer > Budget.minimumB: 
+            Budget.buffer -= Budget.minimumH - self.holidayAdded
+            self.holidayAdded = Budget.minimumH
+        if self.leisureAdded < Budget.minimumL and Budget.buffer > Budget.minimumB:
+            Budget.buffer -= Budget.minimumL - self.leisureAdded
+            self.leisureAdded = Budget.minimumL
             
         Budget.holiday += self.holidayAdded
         Budget.leisure += self.leisureAdded
@@ -126,9 +134,16 @@ class Budget:
 
         self.writeToSheets() 
         
-        print("All good!")
-        
 if __name__ == "__main__":
-    week = Budget()
-    week.finishWeek() 
+    userInput = int(input("What week? "))
+    if userInput == -1:
+        weekUpTo = int(input("Up to what week? ")) + 1 
+        for weekNumber in range(weekUpTo):
+            print("Working on " + str(weekNumber)) 
+            week=Budget(weekNumber)
+            week.finishWeek()
+    else:
+        week = Budget(userInput)   
+        week.finishWeek() 
+    print("All good!")
         
