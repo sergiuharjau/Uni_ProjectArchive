@@ -76,17 +76,14 @@ function giveOption(piece, boxPos, colour){
                         append (availableBoxes , [boxPos[0] , boxPos[1] - 2] )
                     }
                 }
-                fillBoxesGreen(availableBoxes) ;
             }
                                     //adjacent left up
             if (checkBox( [boxPos[0] - 1 , boxPos[1] -1 ] ) == "black"){
-                killBoxes = [ [boxPos[0] - 1 , boxPos[1] -1] ] ;
-                fillKillBoxes(killBoxes) ;
+                append (killBoxes ,  [boxPos[0] - 1 , boxPos[1] -1] ) ;
             }                        //adjacent right up
             if (checkBox( [boxPos[0] + 1 , boxPos[1] -1] ) == "black"){
-                killBoxes = [ [boxPos[0] + 1 , boxPos[1] -1] ];
-                fillKillBoxes(killBoxes) ;
-            }
+                append(killBoxes , [boxPos[0] + 1 , boxPos[1] -1] );
+            } /// append, not reassign 
 
 
         }else if (colour = "black"){
@@ -103,23 +100,20 @@ function giveOption(piece, boxPos, colour){
                         append (availableBoxes , [boxPos[0] , boxPos[1] + 2] )
                     }
                 }
-                fillBoxesGreen(availableBoxes) ; 
             }
                                     //adjacent left up
             if (checkBox( [boxPos[0] - 1 , boxPos[1] +1 ] ) == "white"){
-                killBoxes = [[boxPos[0] - 1 , boxPos[1] +1]] ;
-                fillKillBoxes(killBoxes) ;
+                append(killBoxes, [boxPos[0] - 1 , boxPos[1] +1]) ;
             }                        //adjacent right up
             if (checkBox( [boxPos[0] + 1 , boxPos[1] +1] ) == "white"){
-                killBoxes = [[boxPos[0] + 1 , boxPos[1] +1]] ;
-                fillKillBoxes(killBoxes) ;
+                append(killBoxes, [boxPos[0] + 1 , boxPos[1] +1]) ;
             }
         }
     } // Pawn 
     
     if (piece == 5 || piece == -5 || piece == 2 || piece == -2){
            
-      for ( i = 1 ; i < 7 ; i++){
+      for ( i = 1 ; i < 8 ; i++){
             // top left diagonal
             if (boxPos[0] - i < 0) { break }
             if (boxPos[1] - i < 0) { break }
@@ -136,7 +130,7 @@ function giveOption(piece, boxPos, colour){
             }
         }
 
-        for ( i = 1 ; i < 7 ; i++){
+        for ( i = 1 ; i < 8 ; i++){
             // top right diagonal
             if (boxPos[0] + i > 7) { break }
             if (boxPos[1] - i < 0) { break }
@@ -153,7 +147,7 @@ function giveOption(piece, boxPos, colour){
             }
         }
 
-        for ( i = 1 ; i < 7 ; i++){
+        for ( i = 1 ; i < 8 ; i++){
             // bottom right diagonal
             if (boxPos[0] + i > 7) { break }
             if (boxPos[1] + i > 7) { break }
@@ -170,7 +164,7 @@ function giveOption(piece, boxPos, colour){
             }
         }
 
-        for ( i = 1 ; i < 7 ; i++){
+        for ( i = 1 ; i < 8 ; i++){
             // bottom left diagonal
             if (boxPos[0] - i < 0) { break }
             if (boxPos[1] + i > 7) { break }
@@ -186,13 +180,11 @@ function giveOption(piece, boxPos, colour){
                 append( availableBoxes , [boxPos[0] - i , boxPos[1] + i] )
             }
         }                                   
-        fillBoxesGreen(availableBoxes)
-        fillKillBoxes(killBoxes)
             
     } // Bishop & Queen
     
     if (piece == 3 || piece == -3 || piece == 2 || piece == -2){
-        for ( i = 1 ; i < 7 ; i++){
+        for ( i = 1 ; i < 8 ; i++){
             // left 
             if (boxPos[0] - i < 0) { break }
 
@@ -209,7 +201,7 @@ function giveOption(piece, boxPos, colour){
             }
         }
         
-        for ( i = 1 ; i < 7 ; i++){
+        for ( i = 1 ; i < 8 ; i++){
             // right
             if (boxPos[0] + i > 7) { break }
 
@@ -225,7 +217,7 @@ function giveOption(piece, boxPos, colour){
             }
         }
         
-        for ( i = 1 ; i < 7 ; i++){
+        for ( i = 1 ; i < 8 ; i++){
             // down
             if (boxPos[1] + i > 7) { break }
 
@@ -241,7 +233,7 @@ function giveOption(piece, boxPos, colour){
             }
         }
 
-        for ( i = 1 ; i < 7 ; i++){
+        for ( i = 1 ; i < 8 ; i++){
             // up 
             if (boxPos[1] - i < 0) { break }
 
@@ -257,8 +249,6 @@ function giveOption(piece, boxPos, colour){
             }
         }              
         
-        fillBoxesGreen(availableBoxes)
-        fillKillBoxes(killBoxes)
     }  // Rook & Queen
     
     if (piece == 1 || piece == -1){
@@ -282,8 +272,6 @@ function giveOption(piece, boxPos, colour){
                 }
             }
         }
-        fillBoxesGreen(availableBoxes)
-        fillKillBoxes(killBoxes)
     } // King
     
     if (piece == 4 || piece == -4){
@@ -308,9 +296,10 @@ function giveOption(piece, boxPos, colour){
                     append( availableBoxes , [boxPos[0] + i , boxPos[1] +j ] )
                 }
             }
-        }
-       fillBoxesGreen(availableBoxes)
-       fillKillBoxes(killBoxes) 
+        } 
     } // Knight
+    
+    fillBoxesGreen(availableBoxes)
+    fillKillBoxes(killBoxes)
 }  
 //

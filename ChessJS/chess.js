@@ -10,6 +10,7 @@ var turn;
 var availableBoxes = [];
 var killBoxes = []; 
 var oldPosition = []; 
+var turnNumber = 0 ;
 
 function setup(){
     createCanvas(8 * scl+10, 8 * scl +10);
@@ -18,10 +19,10 @@ function setup(){
     setupPieces() ;
     
     textSize(32) ; 
-    text("Press anywhere to start" ,  scl ,  4*scl)
+    text("Press anywhere to start" , scl ,  4*scl) ;
     
-    console.log("white plays")
-    turn = "white"
+    console.log("white plays") ; 
+    turn = "white" ; 
 }
 
 function draw(){
@@ -30,23 +31,38 @@ function draw(){
 
 function mousePressed(){
     // Triggers on left click
-    boxPos = currentBox() 
+    boxPos = currentBox() ;
+    console.log(boxPos) ; 
     for (i = 0 ; i < availableBoxes.length ; i ++) {
-        if (boxPos[0] == availableBoxes[i][0] && boxPos[1] == availableBoxes[i][1]){
-            advanceTurn() ;
-            movePiece(oldPosition , availableBoxes[i]) ;
-            console.log(turn, "plays") ;
-        }
+          if (boxPos[0] == availableBoxes[i][0] && boxPos[1] == availableBoxes[i][1]){
+              advanceTurn() ;
+              movePiece(oldPosition , availableBoxes[i]) ;
+              console.log(turn, "plays") ;
+              turnNumber ++ ; 
+              console.log(turnNumber)
+              break ; 
+          }
     } 
     for (i = 0 ; i < killBoxes.length ; i ++) {
         if (boxPos[0] == killBoxes[i][0] && boxPos[1] == killBoxes[i][1]){
             advanceTurn() ;
             movePiece(oldPosition , killBoxes[i]) ;
+            turnNumber ++ ; 
+            console.log(turnNumber) ;  
             console.log(turn, "plays") ;
+            break ; 
         }
     } 
-    availableBoxes = [] 
-    killBoxes = [] 
-    selectPiece(turn) ; 
+    if (availableBoxes.length == 0 && killBoxes.length == 0){
+        selectPiece(turn) ; 
+    } else {
+        drawBoard() ;
+        drawPieces() ;  
+        availableBoxes = [] ;
+        killBoxes = [] ;
+    }
+
+    
 }
+
 
