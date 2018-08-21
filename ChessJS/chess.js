@@ -1,4 +1,4 @@
-var scl = 100; 
+var scl = 60; 
 var boxPos = []; 
 var currentState = [] ; 
 var currentState2D = [ 
@@ -18,7 +18,7 @@ function setup(){
     setupPieces() ;
     
     textSize(32) ; 
-    text("Press anywhere to start" , 2 * scl + 40 , 4*scl)
+    text("Press anywhere to start" ,  scl ,  4*scl)
     
     console.log("white plays")
     turn = "white"

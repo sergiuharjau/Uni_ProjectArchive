@@ -75,29 +75,29 @@ function drawPieces(){
             fill(0);
             if (currentState2D[j][i] !=0) {
                 if (currentState2D[j][i] == 1){
-                    image(wKing , scl * i, scl*j, 100, 100)
+                    image(wKing , scl * i, scl*j, scl, scl)
                 }else if (currentState2D[j][i] == 2){
-                    image(wQueen , scl * i, scl*j, 100, 100)
+                    image(wQueen , scl * i, scl*j, scl, scl)
                 }else if (currentState2D[j][i] == 3){
-                    image(wRook , scl * i, scl*j, 100, 100)
+                    image(wRook , scl * i, scl*j, scl, scl)
                 }else if (currentState2D[j][i] == 4){
-                    image(wKnight , scl * i, scl*j, 100, 100)
+                    image(wKnight , scl * i, scl*j, scl, scl)
                 }else if (currentState2D[j][i] == 5){
-                    image(wBishop , scl * i, scl*j, 100, 100)
+                    image(wBishop , scl * i, scl*j, scl, scl)
                 }else if (currentState2D[j][i] == 6){
-                    image(wPawn , scl * i, scl*j, 100, 100)
+                    image(wPawn , scl * i, scl*j, scl, scl)
                 }else if (currentState2D[j][i] == -1){
-                    image(bKing , scl * i, scl*j, 100, 100)
+                    image(bKing , scl * i, scl*j, scl, scl)
                 }else if (currentState2D[j][i] == -2){
-                    image(bQueen , scl * i, scl*j, 100, 100)
+                    image(bQueen , scl * i, scl*j, scl, scl)
                 }else if (currentState2D[j][i] == -3){
-                    image(bRook , scl * i, scl*j, 100, 100)
+                    image(bRook , scl * i, scl*j, scl, scl)
                 }else if (currentState2D[j][i] == -4){
-                    image(bKnight , scl * i, scl*j, 100, 100)
+                    image(bKnight , scl * i, scl*j, scl, scl)
                 }else if (currentState2D[j][i] == -5){
-                    image(bBishop , scl * i, scl*j, 100, 100)
+                    image(bBishop , scl * i, scl*j, scl, scl)
                 }else if (currentState2D[j][i] == -6){
-                    image(bPawn , scl * i, scl*j, 100, 100)
+                    image(bPawn , scl * i, scl*j, scl, scl) 
                 }
             }
         }
