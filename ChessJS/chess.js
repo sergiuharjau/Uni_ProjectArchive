@@ -12,13 +12,15 @@ var killBoxes = [];
 var oldPosition = []; 
 
 function setup(){
-    createCanvas(8 * scl, 8 * scl );
-    
-    drawBoard() ; 
+    createCanvas(8 * scl+10, 8 * scl +10);
+
+    loadPiecesPng() ;
     setupPieces() ;
-    drawPieces() ; 
     
-    console.log("White plays")
+    textSize(32) ; 
+    text("Press anywhere to start" , 2 * scl + 40 , 4*scl)
+    
+    console.log("white plays")
     turn = "white"
 }
 
@@ -29,7 +31,6 @@ function draw(){
 function mousePressed(){
     // Triggers on left click
     boxPos = currentBox() 
-    console.log(boxPos)
     for (i = 0 ; i < availableBoxes.length ; i ++) {
         if (boxPos[0] == availableBoxes[i][0] && boxPos[1] == availableBoxes[i][1]){
             advanceTurn() ;

@@ -29,7 +29,7 @@ function drawBoard(){
         for (j = 0 ; j < 8 ; j ++){
             //console.log(black)
             if (black == 1 && boxes < 8){
-                fill(51) ; 
+                fill(125) ; 
                 black = 0 ;
                 boxes ++ ; 
             }else if (black == 0 && boxes < 8){
@@ -43,24 +43,62 @@ function drawBoard(){
                 boxes ++ ; 
             }else{
                 boxes = 0 ; 
-                fill(51) ; 
+                fill(125) ; 
                 black = 0 ; 
                 boxes ++ ; 
             }
-            rect(scl*j , scl*i, scl-1, scl-1);
+            rect(scl*j, scl*i, scl, scl);
         }
     }
 }
 // Draws the original board
 
+function loadPiecesPng(){
+    wPawn = loadImage("/Project-Archive/ChessJS/PiecesPng/Chess_plt60.png")
+    wBishop = loadImage("/Project-Archive/ChessJS/PiecesPng/Chess_blt60.png")
+    wRook = loadImage("/Project-Archive/ChessJS/PiecesPng/Chess_rlt60.png")
+    wKnight = loadImage("/Project-Archive/ChessJS/PiecesPng/Chess_nlt60.png")
+    wQueen = loadImage("/Project-Archive/ChessJS/PiecesPng/Chess_qlt60.png")
+    wKing = loadImage("/Project-Archive/ChessJS/PiecesPng/Chess_klt60.png")  
+    
+    bPawn = loadImage("/Project-Archive/ChessJS/PiecesPng/Chess_pdt60.png")
+    bBishop = loadImage("/Project-Archive/ChessJS/PiecesPng/Chess_bdt60.png")
+    bRook = loadImage("/Project-Archive/ChessJS/PiecesPng/Chess_rdt60.png")
+    bKnight = loadImage("/Project-Archive/ChessJS/PiecesPng/Chess_ndt60.png")
+    bQueen = loadImage("/Project-Archive/ChessJS/PiecesPng/Chess_qdt60.png")
+    bKing = loadImage("/Project-Archive/ChessJS/PiecesPng/Chess_kdt60.png")
+}
+
 function drawPieces(){
     for (i = 0 ; i < 8 ; i++){
         for (j = 0 ; j < 8 ; j ++){ 
             fill(0);
-            if (currentState2D[j][i] == 0){
-                //
-            }else{
-                text(currentState2D[j][i].toString(), scl*i + 40, scl*j + 50);
+            if (currentState2D[j][i] !=0) {
+                if (currentState2D[j][i] == 1){
+                    image(wKing , scl * i, scl*j, 100, 100)
+                }else if (currentState2D[j][i] == 2){
+                    image(wQueen , scl * i, scl*j, 100, 100)
+                }else if (currentState2D[j][i] == 3){
+                    image(wRook , scl * i, scl*j, 100, 100)
+                }else if (currentState2D[j][i] == 4){
+                    image(wKnight , scl * i, scl*j, 100, 100)
+                }else if (currentState2D[j][i] == 5){
+                    image(wBishop , scl * i, scl*j, 100, 100)
+                }else if (currentState2D[j][i] == 6){
+                    image(wPawn , scl * i, scl*j, 100, 100)
+                }else if (currentState2D[j][i] == -1){
+                    image(bKing , scl * i, scl*j, 100, 100)
+                }else if (currentState2D[j][i] == -2){
+                    image(bQueen , scl * i, scl*j, 100, 100)
+                }else if (currentState2D[j][i] == -3){
+                    image(bRook , scl * i, scl*j, 100, 100)
+                }else if (currentState2D[j][i] == -4){
+                    image(bKnight , scl * i, scl*j, 100, 100)
+                }else if (currentState2D[j][i] == -5){
+                    image(bBishop , scl * i, scl*j, 100, 100)
+                }else if (currentState2D[j][i] == -6){
+                    image(bPawn , scl * i, scl*j, 100, 100)
+                }
             }
         }
     }
