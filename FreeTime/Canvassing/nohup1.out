@@ -1,0 +1,28 @@
+
+         **********  cpuminer-opt 3.7.7  *********** 
+     A CPU miner with multi algo support and optimized for CPUs
+     with AES_NI and AVX2 and SHA extensions.
+     BTC donation address: 12tdvfF7KmAsihBXQXynT6E6th2c2pByTT
+
+CPU:         Intel(R) Pentium(R) CPU 2117U @ 1.80GHz.
+SW built on Dec 17 2017 with GCC 4.8.3.
+CPU features: SSE2.
+SW features: SSE2.
+Algo features: AVX AVX2.
+Start mining with no optimizations.
+
+[2018-02-11 19:24:41] 2 miner threads started, using 'lyra2z330' algorithm.[0m
+[2018-02-11 19:24:41] Starting Stratum on stratum+tcp://zoi-pool3.chainsilo.com:3032[0m
+[2018-02-11 19:24:41][33m Stratum difficulty set to 0.002[0m
+[2018-02-11 19:26:00] CPU #0: 3856 H, 51.60 H/s[0m
+[2018-02-11 19:26:00][01;37m [32mAccepted[01;37m 1/1 (100%), 3856 H, 51.60 H/s[0m
+[2018-02-11 19:26:51] CPU #0: 3096 H, 61.25 H/s[0m
+[2018-02-11 19:27:49] CPU #0: 3676 H, 62.41 H/s[0m
+[2018-02-11 19:28:20] CPU #0: 1723 H, 55.84 H/s[0m
+[2018-02-11 19:28:20][01;37m [32mAccepted[01;37m 2/2 (100%), 1723 H, 55.84 H/s[0m
+[2018-02-11 19:28:30][33m Stratum difficulty set to 0.001[0m
+[2018-02-11 19:29:27] CPU #1: 19.27 kH, 68.35 H/s[0m
+[2018-02-11 19:29:27] CPU #0: 3351 H, 50.06 H/s[0m
+[2018-02-11 19:29:27][01;37m [32mAccepted[01;37m 3/3 (100%), 22.62 kH, 118.41 H/s[0m
+[2018-02-11 19:30:08] CPU #0: 3004 H, 73.68 H/s[0m
+[2018-02-11 19:30:14] CPU #1: 4102 H, 87.00 H/s[0m
