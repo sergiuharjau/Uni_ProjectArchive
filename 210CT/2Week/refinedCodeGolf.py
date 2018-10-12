@@ -33,7 +33,7 @@ for l in open("i","r").readlines():
    a[j][i]=e
    i+=1 
  j+=1 
-g=int(input("Gen? "))
+g=int(input())
 for i in range(g):
  a=s(a)
 for i in range(len(a)):
