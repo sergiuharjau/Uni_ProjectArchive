@@ -1,6 +1,5 @@
 def s(a):
- r=[[1 for x in range(5)] for y in range(5)]
- e=[] 
+ r=[[1 for x in range(5)] for y in range(5)];e=[] 
  for x in range(len(a)):
   for y in range(len(a)):    
    if (x,y) in e:
@@ -15,23 +14,20 @@ def s(a):
        continue
       try: 
        if a[x+m][y+k]=="H":
-        r[x+m][y+k]="I"
-        e.append((x+m,y+k))
+        r[x+m][y+k]="I";e.append((x+m,y+k))
       except:
        pass
    elif a[x][y]=="F":
     r[x][y]="H" 
  return r
-a=[[1 for x in range(5)] for y in range(5)]
-j=0
+a=[[1 for x in range(5)] for y in range(5)];j=0
 for l in open("i","r").readlines():  
  i=0 
  for e in l:
   if e!=" ":
    if i==5:
     break
-   a[j][i]=e
-   i+=1 
+   a[j][i]=e;i+=1 
  j+=1 
 g=int(input())
 for i in range(g):
