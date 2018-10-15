@@ -10,13 +10,12 @@ def s(a):
     r[x][y]="F"         
     for m in range(-1,2):
      for k in range(-1,2):
-      if m==k or m==-k: 
-       continue
-      try: 
-       if a[x+m][y+k]=="H":
-        r[x+m][y+k]="I";e.append((x+m,y+k))
-      except:
-       pass
+      if m!=k and m!=-k: 
+       try: 
+        if a[x+m][y+k]=="H":
+         r[x+m][y+k]="I";e.append((x+m,y+k))
+       except:
+        pass
    elif a[x][y]=="F":
     r[x][y]="H" 
  return r
