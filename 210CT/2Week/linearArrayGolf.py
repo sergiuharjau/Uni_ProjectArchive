@@ -12,7 +12,7 @@ def s(a):
   else:r[i]="H"   
  return r 
 z=range;a=[]
-for i in z(25):a.append(open("i","r").read().replace('\n','')[i])
+a=open("i","r").read().replace('\n','')
 for i in z(int(input())):a=s(a)
 for i in z(25):
  print(a[i],end="")
