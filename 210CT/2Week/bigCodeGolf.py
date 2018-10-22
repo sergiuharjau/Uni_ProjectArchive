@@ -6,7 +6,7 @@ def readMatrix(file):
     rawData = file1.readlines()
 
     array2D = [[None for x in range(n)] for y in range(n)]
- 
+
     j = 0
     for line in rawData:  
         i = 0 
@@ -45,14 +45,13 @@ def advanceState(array2D):
            
                 for m in range(-1,2):
                     for k in range(-1,2):
-                        if m==k or m==-k: 
-                            continue
-                        try: 
-                            if array2D[x+m][y+k] == "H":
-                                newArray2D[x+m][y+k] = "I"
-                                exclude.append((x+m,y+k))
-                        except:
-                            pass
+                        if m!=k and m!=-k: 
+                            try: 
+                                if array2D[x+m][y+k] == "H":
+                                    newArray2D[x+m][y+k] = "I"
+                                    exclude.append((x+m,y+k))
+                            except:
+                                pass
 
             elif array2D[x][y] == "F": #faded becomes healthy 
                 newArray2D[x][y] = "H"
@@ -96,3 +95,4 @@ if __name__ == "__main__":
 #825  - hardcoded another function. hell is real. 
 
 #817  - renamed input.txt to i 
+

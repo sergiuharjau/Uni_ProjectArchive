@@ -5,12 +5,12 @@ whose square can be split into two parts that add up to the original number. For
 Kaprekar number, as 452 = 2025 𝑎𝑛𝑑 20 + 25 = 45. 9 is also a Kaprekar number, as 9^2 =
 81 𝑎𝑛𝑑 8 + 1 = 9.
 """
+#Works as intended.
 
 from b2 import receiveInput
 
 def testNumber(number):
     """Tests if a number is Kaprekar. Returns True/False"""
-    
     i=1 
     numberSquared = number * number 
     
