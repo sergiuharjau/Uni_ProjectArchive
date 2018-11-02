@@ -16,20 +16,14 @@ class TestBST(unittest.TestCase):
         
         for element in smallTest:
             self.smallTree.insertInto(element)
-        
-    def test_insertion(self):
-        """Checks if insertion behaves correctly, on two separate trees."""
-        smallResult = [5,3,1,4,8,6,12] 
+    
+    def test_preOrder(self):
+        """Also inadvertedly checks if they were inserted correctly."""
+        smallResult = [5,3,1,4,8,6,12]
         bigResult = [10, 0, -2, -1, 5, 3, 7, 15, 13, 12, 14, 20, 18, 25]
         
-        i = 0 
-        for element in self.smallTree.traversePreOrder():
-            self.assertEqual(element, smallResult[i])
-            i+=1 
-        i=0 
-        for element in self.bigTree.traversePreOrder():
-            self.assertEqual(element, bigResult[i])
-            i+=1 
+        self.assertEqual(self.smallTree.traversePreOrder(), smallResult)
+        self.assertEqual(self.bigTree.traversePreOrder(), bigResult)
     
     def test_parentalChecking(self):
         """Checks if parent/ child lookup behaves normally"""
@@ -57,14 +51,7 @@ class TestBST(unittest.TestCase):
         self.assertEqual(self.bigTree.fetchNode(12).data, 12)
         self.assertEqual(self.bigTree.fetchNode(100).data, None) 
         
-    
-    def test_preOrder(self):
-        
-        smallResult = [5,3,1,4,8,6,12]
-        bigResult = [10, 0, -2, -1, 5, 3, 7, 15, 13, 12, 14, 20, 18, 25]
-        
-        self.assertEqual(self.smallTree.traversePreOrder(), smallResult)
-        self.assertEqual(self.bigTree.traversePreOrder(), bigResult)
+
     
     
     
