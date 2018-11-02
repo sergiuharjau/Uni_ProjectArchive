@@ -38,15 +38,19 @@ class NodeTree():
         """Returns a tuple of Yes/No + path traversed to the item."""
         if node.data == target:
             return([node.data, "Yes"])
-        if node.isLeaf(): 
-            return([node.data, "No"])
-        
+
         pathTraversed = [node.data]  
         
         if hash(target) > node.key:
-            pathTraversed += node.right.isElement(target) 
+            if node.right == None: 
+                return([node.data, "No"])
+            else:
+                pathTraversed += node.right.isElement(target) 
         else:                   #looks in the appropriate direction
-            pathTraversed += node.left.isElement(target)
+            if node.left == None:
+                return([node.data, "No"])
+            else:
+                pathTraversed += node.left.isElement(target)
 
         return pathTraversed
     
@@ -75,11 +79,12 @@ class NodeTree():
             
         return (dataList)
     
-    def printPreOder(node):
+    def printPreOrder(node):
         """Prints NLR."""
         dataList = node.traversePreOrder()
         for element in dataList:
             print(element, end = " ")
+        print() 
             
     def isLeaf(node):
         """Returns bool whether node is leaf or not."""
