@@ -42,7 +42,7 @@ class TestBST(unittest.TestCase):
         self.assertEqual(self.smallTree.isElement(4), [5, 3, 4, "Yes"])
         
         
-        self.assertEqual(self.bigTree.isElement(8), [10, 0, 5, 7, "No"])
+        self.assertEqual(self.bigTree.isElement(-3), [10, 0, -2, "No"]) #incomplete leaf test 
         self.assertEqual(self.smallTree.isElement(13), [5, 8, 12, "No"])
     
     
