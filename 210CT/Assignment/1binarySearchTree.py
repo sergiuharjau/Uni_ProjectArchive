@@ -12,21 +12,19 @@ class NodeTree():
     def __init__(self, data = None, parent = None, key = None):
         """Initalizes the first node, the root."""
         self.data = data 
-        self.parent = parent #this is the parent node
-        
-        self.key = hash(data)
-        
-        self.right = None #holds node variable
+        self.parent = parent #this is the parent node    
+        self.key = hash(data) #ints hash to themselves 
+        self.right = None #will hold node variable in the future
         self.left = None 
         
     def insertInto(node, data):
         """Inserts element into subtree of node, following BST conventions."""
-        if node.key == 625211: #First element
+        if node.key == 625211: #First insertion 
             node.data = data 
             node.key = hash(data)
-        
+            
         elif node.key > hash(data):
-            if node.left == None:
+            if node.left == None: #If empty, populates
                 node.left = NodeTree(data, node)
             else:
                 node.left.insertInto(data) #Try to insert at left child 
@@ -35,20 +33,9 @@ class NodeTree():
                 node.right = NodeTree(data, node)
             else:
                 node.right.insertInto(data) #Try to insert at right child 
-
-    def traversePreOrder(node):
-        """Traverses tree in NLR manner."""
-        dataList = [node.data] #Deals with the root being None
- 
-        if node.left != None:
-            dataList += node.left.traversePreOrder()
-        if node.right != None:
-            dataList += node.right.traversePreOrder()
-        return (dataList)
     
     def isElement(node, target):
         """Returns a tuple of Yes/No + path traversed to the item."""
-          
         if node.data == target:
             return([node.data, "Yes"])
         if node.isLeaf(): 
@@ -57,8 +44,8 @@ class NodeTree():
         pathTraversed = [node.data]  
         
         if hash(target) > node.key:
-            pathTraversed += node.right.isElement(target)
-        else:
+            pathTraversed += node.right.isElement(target) 
+        else:                   #looks in the appropriate direction
             pathTraversed += node.left.isElement(target)
 
         return pathTraversed
@@ -75,7 +62,18 @@ class NodeTree():
             if node.left != None:
                 return node.left.fetchNode(target)
         
-        return NodeTree()  
+        return NodeTree()  #empty node 
+
+    def traversePreOrder(node):
+        """Traverses tree in NLR manner."""
+        dataList = [node.data] #Will show the value of the nodes.
+ 
+        if node.left != None:
+            dataList += node.left.traversePreOrder()
+        if node.right != None:
+            dataList += node.right.traversePreOrder()
+            
+        return (dataList)
     
     def printPreOder(node):
         """Prints NLR."""
@@ -85,21 +83,10 @@ class NodeTree():
             
     def isLeaf(node):
         """Returns bool whether node is leaf or not."""
-        
         if node.right == None and node.left == None:
             return True
         else:
             return False 
         
 if __name__ == "__main__":
-    
-    tree = NodeTree()
-    
-    while True:
-        inputUser = input("Number to insert: ")
-        if inputUser == ".":
-            break
-        else:
-            tree.insertInto(int(inputUser))
-    
-    print(tree.findElement(6))
+    pass
