@@ -48,30 +48,30 @@ class NodeTree():
     
     def isElement(node, target, pathTraversed = []):
         """Returns a tuple of Yes/No + path traversed to the item."""
-        pathTraversed += [node.key]    
+        pathTraversed += [node.data]    
         if node.data == target:
             return ("Yes" , pathTraversed)
+        if node.isLeaf(): 
+            return("No", pathTraversed)
         
         if hash(target) > node.key:
-            if node.right == None:
-                return("No", pathTraversed)
-            else: 
-                return node.right.isElement(target, pathTraversed)
+            return node.right.isElement(target, pathTraversed)
         else:
-            if node.left == None:
-                return("No", pathTraversed)
-            else: 
-                return node.left.isElement(target, pathTraversed)
+            return node.left.isElement(target, pathTraversed)
     
-    def findElement(node, target):
-        """Returns node object of target."""        
+    def fetchNode(node, target):
+        """Returns node object of target. Returns empty node if target not in tree."""        
         if node.data == target:
             return node 
         
         if hash(target) > node.key:
-            return node.right.findElement(target)
+            if node.right != None:
+                return node.right.fetchNode(target)
         else:
-            return node.left.findElement(target)
+            if node.left != None:
+                return node.left.fetchNode(target)
+        
+        return NodeTree()  
     
     def printPreOder(node):
         """Prints NLR."""
@@ -79,7 +79,14 @@ class NodeTree():
         for element in dataList:
             print(element, end = " ")
             
-    
+    def isLeaf(node):
+        """Returns bool whether node is leaf or not."""
+        
+        if node.right == None and node.left == None:
+            return True
+        else:
+            return False 
+        
 if __name__ == "__main__":
     
     tree = NodeTree()

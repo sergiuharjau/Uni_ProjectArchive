@@ -31,7 +31,7 @@ class TestBST(unittest.TestCase):
             self.assertEqual(element, bigResult[i])
             i+=1 
     
-    def parentalChecking(self):
+    def test_parentalChecking(self):
         """Checks if parent/ child lookup behaves normally"""
             
         kids    = [13, 5, 3, -2, 25] 
@@ -40,20 +40,20 @@ class TestBST(unittest.TestCase):
         for i in range(len(kids)):
             for j in range(len(parents)):
                 if i==j:
-                    assertEqual(bigTree.findElement(kids[i]).parent , parents[i])
+                    self.assertEqual(self.bigTree.fetchNode(kids[i]).parent.data , parents[i])
             
-    def test_deletion(self):
-        pass
+    def test_isWord(self):
         
-    def test_findWord(self): # includes printing the path it traverses.
+        self.assertEqual(self.bigTree.isElement(12), ("Yes", [10, 15, 13, 12]))
         
-        pass
-       # self.assertEqual(self.bigTree.isElement(12), ("Yes", [10, 15, 13, 12]))
-        
-       # self.assertEqual(self.bigTree.isElement(100), ("Yes", [10, 0, 5])) 
+        self.assertEqual(self.bigTree.isElement(5), ("Yes", [10, 0, 5])) 
     
     
-    
+    def test_fetchWordNode(self):
+        
+        self.assertEqual(self.bigTree.fetchNode(12).data, 12)
+        self.assertEqual(self.bigTree.fetchNode(100).data, None) 
+        
     
     def test_preOrder(self):
         
@@ -62,6 +62,11 @@ class TestBST(unittest.TestCase):
         
         self.assertEqual(self.smallTree.traversePreOrder(), smallResult)
         self.assertEqual(self.bigTree.traversePreOrder(), bigResult)
-
+    
+    
+    
+    def test_deletion(self):
+        pass
+        
 if __name__ == "__main__":
     unittest.main() 
