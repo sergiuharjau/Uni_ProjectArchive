@@ -44,9 +44,12 @@ class TestBST(unittest.TestCase):
             
     def test_isWord(self):
         
-        self.assertEqual(self.bigTree.isElement(12), ("Yes", [10, 15, 13, 12]))
+        self.assertEqual(self.bigTree.isElement(12), [10, 15, 13, 12, "Yes"])
+        self.assertEqual(self.smallTree.isElement(4), [5, 3, 4, "Yes"])
         
-        self.assertEqual(self.bigTree.isElement(5), ("Yes", [10, 0, 5])) 
+        
+        self.assertEqual(self.bigTree.isElement(8), [10, 0, 5, 7, "No"])
+        self.assertEqual(self.smallTree.isElement(13), [5, 8, 12, "No"])
     
     
     def test_fetchWordNode(self):
