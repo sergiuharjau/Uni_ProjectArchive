@@ -46,18 +46,22 @@ class NodeTree():
             dataList += node.right.traversePreOrder()
         return (dataList)
     
-    def isElement(node, target, pathTraversed = []):
+    def isElement(node, target):
         """Returns a tuple of Yes/No + path traversed to the item."""
-        pathTraversed += [node.data]    
+          
         if node.data == target:
-            return ("Yes" , pathTraversed)
+            return([node.data, "Yes"])
         if node.isLeaf(): 
-            return("No", pathTraversed)
+            return([node.data, "No"])
+        
+        pathTraversed = [node.data]  
         
         if hash(target) > node.key:
-            return node.right.isElement(target, pathTraversed)
+            pathTraversed += node.right.isElement(target)
         else:
-            return node.left.isElement(target, pathTraversed)
+            pathTraversed += node.left.isElement(target)
+
+        return pathTraversed
     
     def fetchNode(node, target):
         """Returns node object of target. Returns empty node if target not in tree."""        
