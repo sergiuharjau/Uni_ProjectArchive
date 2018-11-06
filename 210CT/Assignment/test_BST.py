@@ -50,13 +50,21 @@ class TestBST(unittest.TestCase):
         
         self.assertEqual(self.bigTree.fetchNode(12).data, 12)
         self.assertEqual(self.bigTree.fetchNode(100).data, None) 
-        
-
-    
-    
     
     def test_deletion(self):
-        pass
+        self.smallTree.deleteNode(1) #leaf test 
+        self.assertEqual(self.smallTree.traversePreOrder(), [5, 3, 4, 8, 6, 12])
+        
+        self.smallTree.deleteNode(3) #1 child 
+        self.assertEqual(self.smallTree.traversePreOrder(), [5, 4, 8, 6, 12])
+        
+        self.bigTree.deleteNode(0)   #2 children
+        self.assertEqual(self.bigTree.traversePreOrder(), [10, 3, -2, -1, 5, 7, 15, 13, 12, 14, 20, 18, 25])
+        
+        self.bigTree.deleteNode(10)  #2 children
+        self.assertEqual(self.bigTree.traversePreOrder(), [12, 3, -2, -1, 5, 7, 15, 13, 14, 20, 18, 25])
+        
+        
         
 if __name__ == "__main__":
     unittest.main() 
