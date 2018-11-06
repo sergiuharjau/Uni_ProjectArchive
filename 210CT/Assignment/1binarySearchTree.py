@@ -95,39 +95,31 @@ class NodeTree():
                 minimum = newRoot.data 
             newRoot = newRoot.left 
         return minimum      
-    
-    def swapNodes(node1, node2):
-        """Swaps two nodes in a tree."""
-        node1.right = node2.right 
-        node1.left = node2.left 
-        node1.data = node2.data
-        node1.key = node2.key
-        node1.parent = node2.parent 
-    
+
     def deleteNode(root, value): 
         """Deletes node of value in tree starting root."""
         nodeTBD = root.fetchNode(value)
-        
+            #To Be Deleted 
         if nodeTBD.isLeaf():
             if nodeTBD.parent.left == nodeTBD:
                 nodeTBD.parent.left = None 
             else:
                 nodeTBD.parent.right = None 
-            
-        elif nodeTBD.right != None and nodeTBD.left !=None: #2 children 
+        #2 children 
+        elif nodeTBD.right != None and nodeTBD.left !=None:
             nodeToSwap = nodeTBD.fetchNode(nodeTBD.findLowest())
-            nodeTBD.data = nodeToSwap.data
+            nodeTBD.data = nodeToSwap.data #transfer data over 
             if nodeToSwap.parent.left == nodeToSwap:
-                nodeToSwap.parent.left = None
+                nodeToSwap.parent.left = None #delete swapped node 
             else:
-                nodeToSwap.parent.right = None 
+                nodeToSwap.parent.right = None                 
         else: #1 child
-            if nodeTBD.left != None:
-                if nodeTBD.parent.left == nodeTBD:
+            if nodeTBD.left != None: #left branch 
+                if nodeTBD.parent.left == nodeTBD: 
                     nodeTBD.parent.left = nodeTBD.left 
                 else:
                     nodeTBD.parent.right = nodeTBD.left 
-            else:
+            else: #right branch 
                 if nodeTBD.parent.left == nodeTBD:
                     nodeTBD.parent.left = nodeTBD.right 
                 else:
