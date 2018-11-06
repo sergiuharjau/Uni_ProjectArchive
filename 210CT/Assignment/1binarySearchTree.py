@@ -100,7 +100,10 @@ class NodeTree():
         """Deletes node of value in tree starting root."""
         nodeTBD = root.fetchNode(value)
             #To Be Deleted 
-        if nodeTBD.isLeaf():
+        if nodeTBD.parent == None: #If we're deleting root  
+            nodeTBD.data = None  
+            nodeTBD.key = hash(None)
+        elif nodeTBD.isLeaf():
             if nodeTBD.parent.left == nodeTBD:
                 nodeTBD.parent.left = None 
             else:
