@@ -85,7 +85,46 @@ class NodeTree():
         for element in dataList:
             print(element, end = " ")
         print() 
+    
+    def findLowest(node):
+        """Returns the lowest value from  the right of a given node."""
+        minimum = node.key 
+        newRoot = node.right 
+        while newRoot != None:
+            if minimum < newRoot.key:
+                minimum = newRoot.key 
+            newRoot = newRoot.left 
+        return minimum      
+
+    def deleteNode(root, value): 
+        """Deletes node of value in tree starting root."""
+        nodeTBD = root.fetchNode(value)
+        
+        if nodeTBD.isLeaf():
+            print("isleaf") 
+            if nodeTBD.parent.left == nodeTBD:
+                nodeTBD.parent.left = None 
+            else:
+                nodeTBD.parent.right = None 
             
+        elif nodeTBD.right != None and nodeTBD.left !=None: #2 children 
+            nodeToSwap = nodeTBD.fetchNode(nodeTBD.findLowest())
+            if nodeTBD.parent.left == nodeTBD:
+                nodeTBD.parent.left = nodeToSwap
+            else:
+                nodeTBD.parent.left = nodeToSwap
+        else: #1 child
+            if nodeTBD.left != None:
+                if nodeTBD.parent.left == nodeTBD:
+                    nodeTBD.parent.left = nodeTBD.left 
+                else:
+                    nodeTBD.parent.right = nodeTBD.left 
+            else:
+                if nodeTBD.parent.left == nodeTBD:
+                    nodeTBD.parent.left = nodeTBD.right 
+                else:
+                    nodeTBD.parent.right = nodeTBD.right
+
     def isLeaf(node):
         """Returns bool whether node is leaf or not."""
         if node.right == None and node.left == None:
