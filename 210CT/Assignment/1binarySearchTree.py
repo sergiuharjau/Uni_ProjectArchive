@@ -9,21 +9,18 @@ determining the answer, followed by yes if found or no, respectively.
 class NodeTree():
     """Class that holds objects of nodes in a Binary Search Tree."""
     
-    def __init__(self, data = None, parent = None, key = None):
+    def __init__(self, data = None, parent = None):
         """Initalizes the first node, the root."""
         self.data = data 
         self.parent = parent #this is the parent node    
-        self.key = hash(data) #ints hash to themselves 
         self.right = None #will hold node variable in the future
         self.left = None 
         
     def insertInto(node, data):
         """Inserts element into subtree of node, following BST conventions."""
-        if node.key == 625211: #First insertion 
+        if node.data == None: #First insertion 
             node.data = data 
-            node.key = hash(data)
-            
-        elif node.key > hash(data):
+        elif node.data > data:
             if node.left == None: #If empty, populates
                 node.left = NodeTree(data, node)
             else:
@@ -41,7 +38,7 @@ class NodeTree():
 
         pathTraversed = [node.data]  
         
-        if hash(target) > node.key:
+        if target > node.data:
             if node.right == None: 
                 return([node.data, "No"])
             else:
@@ -59,7 +56,7 @@ class NodeTree():
         if node.data == target:
             return node 
         
-        if hash(target) > node.key:
+        if target > node.data:
             if node.right != None:
                 return node.right.fetchNode(target)
         else:
@@ -102,7 +99,6 @@ class NodeTree():
             #To Be Deleted 
         if nodeTBD.parent == None: #If we're deleting root  
             nodeTBD.data = None  
-            nodeTBD.key = hash(None)
         elif nodeTBD.isLeaf():
             if nodeTBD.parent.left == nodeTBD:
                 nodeTBD.parent.left = None 
