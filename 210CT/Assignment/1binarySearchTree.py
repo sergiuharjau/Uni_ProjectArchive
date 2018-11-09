@@ -14,12 +14,15 @@ class NodeTree():
         self.data = data 
         self.parent = parent #this is the parent node    
         self.right = None #will hold node variable in the future
-        self.left = None 
+        self.left = None
+        self.frequency = 1 #keeps track of frequency
         
     def insertInto(node, data):
         """Inserts element into subtree of node, following BST conventions."""
         if node.data == None: #First insertion 
             node.data = data 
+        elif node.data == data:
+            node.frequency += 1 
         elif node.data > data:
             if node.left == None: #If empty, populates
                 node.left = NodeTree(data, node)
@@ -140,6 +143,13 @@ class NodeTree():
             return True
         else:
             return False 
+        
+    def determineFrequency(tree):
+        """Returns all nodes in the tree, and their respective frequency."""
+        dataList = [] 
+        for element in tree.traversePreOrder():
+            dataList.append(str(element) + ": " + str(tree.fetchNode(element).frequency)) 
+        return dataList
         
 if __name__ == "__main__":
     pass
