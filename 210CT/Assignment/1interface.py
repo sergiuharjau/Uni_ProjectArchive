@@ -1,7 +1,7 @@
 bst = __import__("1binarySearchTree")
 
 print("Write exit to stop.")
-print("Write textfile to read from textfile. ")
+print("Write textfile to read from textfile.")
 userInput = []
 tree = bst.NodeTree() 
 intCheck = int(input("\nAre you inserting integers? 1-yes "))
@@ -18,9 +18,9 @@ while True:
         else: tree.insertInto(element)
 
 while True:
-    choice = int(input("1.Print in PreOrder(NLR)\n2.Find element\n3.Delete element\n4.Exit\nChoice: "))
+    choice = int(input("1.Print in PreOrder(NLR)\n2.Find element\n3.Delete element\n4.Determine Frequency\n5.Exit\nChoice: "))
     
-    if choice == 4:break
+    if choice == 5:break
     elif choice == 1:
         print("\nCurrent Binary Tree in PreOrder: ")
         tree.printPreOrder() 
@@ -42,3 +42,8 @@ while True:
         else: tree.deleteNode(element)
         print("Element deleted.")
         input() 
+    elif choice == 4:
+        print()
+        for line in tree.determineFrequency():
+            print(line)
+        input()
