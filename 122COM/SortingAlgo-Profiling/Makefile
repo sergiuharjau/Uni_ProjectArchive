@@ -9,3 +9,6 @@ profilingTests.o: profilingTests.cpp
 
 SergeLib.o: ../SergeLib/SergeLib.cpp
 	g++ --std=c++14 ../SergeLib/SergeLib.cpp -c 
+	
+clean: 
+	rm *.o a.out 
