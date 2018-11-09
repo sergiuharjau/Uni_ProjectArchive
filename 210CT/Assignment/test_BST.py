@@ -26,8 +26,7 @@ class TestBST(unittest.TestCase):
         self.assertEqual(self.bigTree.traversePreOrder(), bigResult)
     
     def test_parentalChecking(self):
-        """Checks if parent/ child lookup behaves normally"""
-            
+        """Checks if parent/ child lookup behaves normally"""      
         kids    = [13, 5, 3, -2, 25] 
         parents = [15, 0, 5,  0, 20]
 
@@ -35,6 +34,11 @@ class TestBST(unittest.TestCase):
             for j in range(len(parents)):
                 if i==j:
                     self.assertEqual(self.bigTree.fetchNode(kids[i]).parent.data , parents[i])
+    
+    def test_fetchWordNode(self):
+        
+        self.assertEqual(self.bigTree.fetchNode(12).data, 12)
+        self.assertEqual(self.bigTree.fetchNode(100).data, None) 
             
     def test_isWord(self):
         
@@ -44,13 +48,7 @@ class TestBST(unittest.TestCase):
         
         self.assertEqual(self.bigTree.isElement(-3), [10, 0, -2, "No"]) #incomplete leaf test 
         self.assertEqual(self.smallTree.isElement(13), [5, 8, 12, "No"])
-    
-    
-    def test_fetchWordNode(self):
-        
-        self.assertEqual(self.bigTree.fetchNode(12).data, 12)
-        self.assertEqual(self.bigTree.fetchNode(100).data, None) 
-    
+
     def test_deletion(self):
         
         self.smallTree.deleteNode(1) #leaf test 
@@ -80,6 +78,10 @@ class TestBST(unittest.TestCase):
         
         self.bigTree.deleteNode(10) #root deletion
         self.assertEqual(self.bigTree.traversePreOrder(), [12, 3, -2, -1, 5, 7, 18, 13, 14, 20, 25])
-              
+    
+    def test_frequency(self):
+        
+        self.assertEqual(self.smallTree.determineFrequency(), ["5: 1", "3: 1", "1: 1", "4: 1", "8: 1", "6: 1", "12: 1"])
+
 if __name__ == "__main__":
     unittest.main() 
