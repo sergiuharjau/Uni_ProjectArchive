@@ -1,16 +1,21 @@
 bst = __import__("1binarySearchTree")
 
-intCheck = int(input("Are you inserting integers?\n1-yes\n0-no "))
+intCheck = int(input("\nAre you inserting integers?\n1-yes\n0-no "))
 print("\nWrite exit to stop.")
-print("Write textfile to read from textfile.\n")
+print("Write txt to read from textfile.\n")
 userInput = []
 tree = bst.NodeTree() 
 while True:
     element = input("Element: ")
     if element == "exit": break
-    if element == "textfile": 
+    if element == "txt": 
         for element in open("input.txt", "r").read().split(" "):
-            tree.insertInto(element)
+            if "\n" in element: #deals with ends of line
+                elementList = element.split("\n")
+                for newElement in elementList:
+                    if newElement != "": #makes sure we don't have empty nodes
+                        tree.insertInto(newElement)
+            else: tree.insertInto(element)    
         break 
     else:
         if intCheck: 
