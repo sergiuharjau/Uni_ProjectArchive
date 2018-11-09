@@ -67,8 +67,10 @@ class NodeTree():
 
     def traversePreOrder(node):
         """Traverses tree in NLR manner."""
-        dataList = [node.data] #Will show the value of the nodes.
- 
+        if node.data != None:
+            dataList = [node.data] #Will show the value of the nodes.
+        else: dataList = [] 
+            
         if node.left != None:
             dataList += node.left.traversePreOrder()
         if node.right != None:
@@ -87,7 +89,7 @@ class NodeTree():
         """Returns the lowest value from  the right of a given node."""
         newRoot = node.right 
         minimum = newRoot.data
-        while newRoot != None:
+        while newRoot != None and newRoot.data != None:
             if minimum > newRoot.data:
                 minimum = newRoot.data 
             newRoot = newRoot.left 
@@ -97,35 +99,43 @@ class NodeTree():
         """Deletes node of value in tree starting root."""
         nodeTBD = root.fetchNode(value)
             #To Be Deleted 
-        if nodeTBD.parent == None: #If we're deleting root  
+        if nodeTBD.parent == None and nodeTBD.isLeaf(): #If we're deleting leaf root
             nodeTBD.data = None  
-        elif nodeTBD.isLeaf():
+        elif nodeTBD.parent == None and (nodeTBD.right == None or nodeTBD.left == None): #deleting root with one child
+            if nodeTBD.left !=None:
+                nodeTBD.data = nodeTBD.left.data
+                nodeTBD.left = None
+            else :
+                nodeTBD.data = nodeTBD.right.data
+                nodeTBD.right = None 
+        elif nodeTBD.isLeaf():  #deleting a leaf
             if nodeTBD.parent.left == nodeTBD:
                 nodeTBD.parent.left = None 
             else:
                 nodeTBD.parent.right = None 
-        #2 children 
-        elif nodeTBD.right != None and nodeTBD.left !=None:
-            nodeToSwap = nodeTBD.fetchNode(nodeTBD.findLowest())
+        elif nodeTBD.right != None and nodeTBD.left !=None: #2 children      
+            nodeToSwap = nodeTBD.fetchNode(nodeTBD.findLowest())       
             nodeTBD.data = nodeToSwap.data #transfer data over 
             if nodeToSwap.parent.left == nodeToSwap:
                 nodeToSwap.parent.left = None #delete swapped node 
-            else:
+            else:          
                 nodeToSwap.parent.right = None                 
         else: #1 child
             if nodeTBD.left != None: #left branch 
                 if nodeTBD.parent.left == nodeTBD: 
-                    nodeTBD.parent.left = nodeTBD.left 
+                    nodeTBD.parent.left.data = nodeTBD.left.data       
                 else:
-                    nodeTBD.parent.right = nodeTBD.left 
+                    nodeTBD.parent.right.data = nodeTBD.left.data
+                nodeTBD.left = None
             else: #right branch 
                 if nodeTBD.parent.left == nodeTBD:
-                    nodeTBD.parent.left = nodeTBD.right 
+                    nodeTBD.parent.left.data = nodeTBD.right.data
                 else:
-                    nodeTBD.parent.right = nodeTBD.right
+                    nodeTBD.parent.right.data = nodeTBD.right.data
+                nodeTBD.right = None
 
     def isLeaf(node):
-        """Returns bool whether node is leaf or not."""
+        """Returns bool whether node is leaf or not."""  
         if node.right == None and node.left == None:
             return True
         else:
