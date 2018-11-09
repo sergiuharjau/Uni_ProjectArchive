@@ -1,10 +1,10 @@
 bst = __import__("1binarySearchTree")
 
-print("Write exit to stop.")
-print("Write textfile to read from textfile.")
+intCheck = int(input("Are you inserting integers?\n1-yes\n0-no "))
+print("\nWrite exit to stop.")
+print("Write textfile to read from textfile.\n")
 userInput = []
 tree = bst.NodeTree() 
-intCheck = int(input("\nAre you inserting integers? 1-yes "))
 while True:
     element = input("Element: ")
     if element == "exit": break
