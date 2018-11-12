@@ -36,8 +36,11 @@ class TestGraph(unittest.TestCase):
     def test_isConnected(self):
         """Checks isConnected() behaviour."""
         
-        self.assertEqual(self.simpleG.isConneted(), True)
+        self.assertEqual(self.simpleG.isConnected(), True)
         self.assertEqual(self.complexG.isConnected(), True)
+        
+        self.brokenGraph = gs.GraphStructure([1,2,3,4], [(1,2), (2,3)])
+        self.assertEqual(self.brokenGraph.isConnected(), False)
         
         
 if __name__ == "__main__":
