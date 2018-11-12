@@ -22,27 +22,28 @@ class GraphStructure():
                     else: self.adjacency[node].append(edge[1])
     
     def isPath(self, start, target):
-        """Returns True/False"""
+        """Returns True/False."""
         
         if start not in self.adjacency or target not in self.adjacency:
             return False
         
         toVisit = [start]
         visited = [] 
+        index = 0
         
         while toVisit != []:
             
-            current = toVisit[0]
+            current = toVisit[index]
             
             if current in visited:
-                del toVisit[0]
+                index += 1 
                 continue
             if current == target:
                 return True 
             
             toVisit += self.adjacency[current]
             visited.append(current)  
-            del toVisit[0]
+            index += 1 
         
         return False  
         
