@@ -15,18 +15,17 @@ class TestGraph(unittest.TestCase):
     
     def test_isPath(self):
         """Checks isPath() behaviour"""
-        self.assertEqual(self.simpleG.isPath(3,4), True)#[3, 4]) 
-        self.assertEqual(self.simpleG.isPath(3,2), True)#[3, 4, 2])
-        self.assertEqual(self.simpleG.isPath(3,1), True)#[3, 4, 2, 1])  
-        self.assertEqual(self.simpleG.isPath(5,1), True)#[5, 3, 4, 2, 1])
-        self.assertEqual(self.simpleG.isPath(4,1), True)#[4, 2, 1])
+        self.assertEqual(self.simpleG.isPath(3,4), (True, [3, 4]))
+        self.assertEqual(self.simpleG.isPath(3,2), (True, [3, 4, 2]))
+        self.assertEqual(self.simpleG.isPath(3,1), (True, [3, 4, 2, 1]) ) 
+        self.assertEqual(self.simpleG.isPath(5,1), (True, [5, 4, 2, 1]))
+        self.assertEqual(self.simpleG.isPath(4,1), (True, [4, 2, 1]))
         
-        self.assertEqual(self.complexG.isPath(9,7),  True)#[9,6,7])
-        self.assertEqual(self.complexG.isPath(10,7), True)#[10,9,6,7])
-        self.assertEqual(self.complexG.isPath(11,8), True)#[11,9,6,8])
-
-        self.assertEqual(self.complexG.isPath(8,13), True)#[8,6,9,12,13])
-        self.assertEqual(self.complexG.isPath(13,7), True)#[13,12,8,6,7])
+        self.assertEqual(self.complexG.isPath(9,7),  (True, [9,6,7]))
+        self.assertEqual(self.complexG.isPath(10,7), (True, [10,9,6,7]))
+        self.assertEqual(self.complexG.isPath(11,8), (True, [11,9,6,8]))
+        self.assertEqual(self.complexG.isPath(8,13), (True, [8,12,13]))
+        self.assertEqual(self.complexG.isPath(13,7), (True, [13,12,8,6,7]))
         
         
         self.assertEqual(self.simpleG.isPath(1,6), False) #not in graph
