@@ -32,7 +32,12 @@ class TestGraph(unittest.TestCase):
         self.assertEqual(self.simpleG.isPath(0,7), False)
         self.assertEqual(self.complexG.isPath(10, 100), False)
         self.assertEqual(self.complexG.isPath(1, 4), False)
+   
+    def test_isConnected(self):
+        """Checks isConnected() behaviour."""
         
+        self.assertEqual(self.simpleG.isConneted(), True)
+        self.assertEqual(self.complexG.isConnected(), True)
         
         
 if __name__ == "__main__":
