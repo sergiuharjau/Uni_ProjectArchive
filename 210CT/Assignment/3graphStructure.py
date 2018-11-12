@@ -23,6 +23,7 @@ class GraphStructure():
     
     def isPath(self, start, target):
         """Returns True/False, followed by the path it took."""  
+        
         if start not in self.adjacency or target not in self.adjacency:
             return False
         
@@ -72,3 +73,72 @@ class GraphStructure():
             if node not in inGraph:
                 return False          
         return True
+    
+    def traverseBreadthFirst(self, toStart):
+        """Returns sequence of nodes in breadth first manner."""
+        
+        toVisit = [toStart]
+        visited = [] 
+        
+        while toVisit != []:
+            
+            current = toVisit[0]
+     
+            if current in visited:
+                del toVisit[0]
+                continue
+            
+            for node in self.adjacency[current]:
+                if node not in visited:
+                    toVisit.append(node)
+                    
+            visited.append(current)
+            del toVisit[0]
+
+        
+        for node in self.adjacency:
+            if node not in visited:
+                visited.append(node)
+
+        return (visited)
+    
+    def traverseDepthFirst(self, toStart, visited=[]):
+        """Recursively returns sequence of nodes in depth first manner."""
+        count = 0
+        for node in self.adjacency[toStart]: #base case
+            if node in visited:
+                count += 1 
+        if count == len(self.adjacency[toStart]):
+            return visited #if all neighbours have been visited, nothing to do
+        
+        if visited == []: #first function call
+            visited = [toStart]      
+                
+        for node in self.adjacency[toStart]: #for all neighbours
+            if node not in visited:
+                visited.append(node)
+                visited = self.traverseDepthFirst(node, visited)
+            
+        return visited
+            
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
