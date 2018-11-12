@@ -12,7 +12,6 @@ class GraphStructure():
     def __init__(self, vertices, edges):
         
         self.adjacency = {} #nodes as keys, connections as lists
-        self.exclusions = [] 
         
         for node in vertices:
             self.adjacency[node] = [] 
@@ -22,25 +21,31 @@ class GraphStructure():
                         self.adjacency[node].append(edge[0])
                     else: self.adjacency[node].append(edge[1])
     
-    def isPath(self, v, w):
-        """Returns path from v to w, if it exists."""
-        if v not in self.adjacency or w not in self.adjacency:
+    def isPath(self, start, target):
+        """Returns True/False"""
+        
+        if start not in self.adjacency or target not in self.adjacency:
             return False
-        path = [v] 
-        if w in self.adjacency[v]:
-            path += [w]
-        else:
-            for node in self.adjacency[v]:
-                if self.adjacency[node] == [v]: #if node we want to go to is leaf, skip it
-                    pass
-                elif node not in self.exclusions:
-                    self.exclusions.append(node) #makes sure we never backtrack
-                    path += self.isPath(node,w)
-                if w in path: break
-                    
-        self.exclusions = [] #reset exclusions      
-        return path
-    
+        
+        toVisit = [start]
+        visited = [] 
+        
+        while toVisit != []:
+            
+            current = toVisit[0]
+            
+            if current in visited:
+                del toVisit[0]
+                continue
+            if current == target:
+                return True 
+            
+            toVisit += self.adjacency[current]
+            visited.append(current)  
+            del toVisit[0]
+        
+        return False  
+        
     def getAdjacency(self):
         """Returns adjacency dictionary"""
         return self.adjacency
