@@ -49,7 +49,31 @@ class GraphStructure():
             del toVisit[0]
         
         return False  
+    
+    def isConnected(self):
+        """Returns True/False, whether the graph is fully connected or not."""
         
+        inGraph = []
+        toVisit = [ list(self.adjacency.keys())[0] ] 
+                            #first node 
+        while toVisit != []:
+            
+            current = toVisit[0]      
+            
+            if current in inGraph:
+                del toVisit[0]
+                continue        
+                
+            toVisit += self.adjacency[current]         
+            inGraph.append(current)
+            del toVisit[0]
+        
+        for node in self.adjacency:
+            if node not in inGraph:
+                return False          
+        return True
+    
+    
     def getAdjacency(self):
         """Returns adjacency dictionary"""
         return self.adjacency
