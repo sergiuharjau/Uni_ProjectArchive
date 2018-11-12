@@ -72,9 +72,3 @@ class GraphStructure():
             if node not in inGraph:
                 return False          
         return True
-    
-    
-    def getAdjacency(self):
-        """Returns adjacency dictionary"""
-        return self.adjacency
-            
