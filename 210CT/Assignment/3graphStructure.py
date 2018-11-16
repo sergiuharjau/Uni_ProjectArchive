@@ -72,9 +72,11 @@ class GraphStructure():
             
             if current in inGraph:
                 del toVisit[0]
-                continue        
+                continue       
                 
-            toVisit += self.adjacency[current]         
+            for element in self.adjacency[current]:
+                toVisit.append(element[0])  
+                
             inGraph.append(current)
             del toVisit[0]
         
