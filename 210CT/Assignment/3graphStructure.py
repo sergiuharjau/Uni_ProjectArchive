@@ -26,7 +26,7 @@ class GraphStructure():
         """Returns True/False, followed by the path it took."""  
         
         if start not in self.adjacency or target not in self.adjacency:
-            return False
+            return [False]
         
         toVisit = [[start]]
         visited = [] 
@@ -49,7 +49,7 @@ class GraphStructure():
             visited.append(current)  
             del toVisit[0]
         
-        return False  
+        return [False]  
     
     def isConnected(self):
         """Returns True/False, whether the graph is fully connected or not."""
@@ -89,9 +89,9 @@ class GraphStructure():
             if current in visited:
                 del toVisit[0]
                 continue
-            
+
             for node in self.adjacency[current]:
-                if node not in visited:
+                if node[0] not in visited:
                     toVisit.append(node[0])
                     
             visited.append(current)
@@ -102,7 +102,7 @@ class GraphStructure():
             if node not in visited:
                 visited.append(node)
 
-        return (visited)
+        return visited
     
     def traverseDepthFirst(self, toStart, visited=[]):
         """Recursively returns sequence of nodes in depth first manner."""
@@ -127,7 +127,7 @@ class GraphStructure():
         """Finds shortest path between to vertices of a given Graph using Dijkstra."""
       
         if toStart not in self.adjacency or end not in self.adjacency:
-            return None
+            return [None]
         
         current = toStart
         
