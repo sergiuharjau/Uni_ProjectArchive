@@ -101,11 +101,11 @@ class GraphStructure():
             
             for node in self.adjacency[current]:
                 if node not in visited:
-                    toVisit.append(node)
+                    toVisit.append(node[0])
                     
             visited.append(current)
             del toVisit[0]
-
+       
         
         for node in self.adjacency:
             if node not in visited:
@@ -126,9 +126,9 @@ class GraphStructure():
             visited = [toStart]      
                 
         for node in self.adjacency[toStart]: #for all neighbours
-            if node not in visited:
-                visited.append(node)
-                visited = self.traverseDepthFirst(node, visited)
+            if node[0] not in visited:
+                visited.append(node[0])
+                visited = self.traverseDepthFirst(node[0], visited)
             
         return visited
             
