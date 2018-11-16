@@ -7,13 +7,12 @@ class TestGraph(unittest.TestCase):
         """Initiates a graph"""                               #(node, node, weight) 
         self.simpleG = gs.GraphStructure([1, 2, 3, 4, 5], [(1,2,3), (2,4,3), (3,4,5), (3,5,1), (4,5,2)])
         self.complexG = gs.GraphStructure([6, 7, 8, 9, 10, 11, 12, 13, 21, 24], [(6,7,2), (7,21,1), (21,24,1), (6,9,5), (6,8,2), (8,12,2), (12,9,3), (9,11,2), (9,10,2), (12,13,4)])   
-        self.brokenGraph = gs.GraphStructure([1,2,3,4], [(1,2), (2,3)])               #(node, node, weight)
+        self.brokenGraph = gs.GraphStructure([1,2,3,4], [(1,2,0), (2,3,0)])               #(node, node, weight)
         
     def test_Creation(self):
         """Sanity check."""
-        self.assertEqual(self.simpleG.adjacency, {1: [2], 2: [1, 4], 3: [4, 5], 4: [2, 3, 5], 5: [3, 4]})
-        self.assertEqual(self.complexG.adjacency, {6: [7,9,8], 7: [6, 21], 8: [6,12], 9:[6, 12, 11, 10], 10: [9], 11: [9], 12: [8, 9, 13], 13:[12], 21:[7, 24], 24:[21]})
-    
+        self.assertEqual(self.simpleG.adjacency, {1: [ (2,3) ], 2: [ (1,3), (4,3) ], 3: [ (4,5) , (5,1) ], 4: [ (2,3), (3,5), (5,2) ], 5: [ (3,1), (4,2) ]})
+        self.assertEqual(self.complexG.adjacency, {6: [ (7,2) , (9,5) , (8,2) ], 7: [ (6,2) , (21,1) ], 8: [ (6,2) , (12,2) ], 9:[ (6,5), (12,3), (11,2), (10,2) ], 10: [(9,2)], 11: [(9,2)], 12: [(8,2), (9,3), (13,4)], 13:[(12,4)], 21:[(7,1), (24,1)], 24:[(21,1)]})
     def test_isPath(self):
         """Checks isPath() behaviour"""
         self.assertEqual(self.simpleG.isPath(3,4), (True, [3, 4]))
