@@ -54,19 +54,19 @@ function drawBoard(){
 // Draws the original board
 
 function loadPiecesPng(){
-    wPawn = loadImage("/Project-Archive/ChessJS/PiecesPng/Chess_plt60.png")
-    wBishop = loadImage("/Project-Archive/ChessJS/PiecesPng/Chess_blt60.png")
-    wRook = loadImage("/Project-Archive/ChessJS/PiecesPng/Chess_rlt60.png")
-    wKnight = loadImage("/Project-Archive/ChessJS/PiecesPng/Chess_nlt60.png")
-    wQueen = loadImage("/Project-Archive/ChessJS/PiecesPng/Chess_qlt60.png")
-    wKing = loadImage("/Project-Archive/ChessJS/PiecesPng/Chess_klt60.png")  
+    wPawn = loadImage("/Project-Archive/FreeTime/Assets/PiecesPng/Chess_plt60.png")
+    wBishop = loadImage("/Project-Archive/FreeTime/Assets/PiecesPng/Chess_blt60.png")
+    wRook = loadImage("/Project-Archive/FreeTime/Assets/PiecesPng/Chess_rlt60.png")
+    wKnight = loadImage("/Project-Archive/FreeTime/Assets/PiecesPng/Chess_nlt60.png")
+    wQueen = loadImage("/Project-Archive/FreeTime/Assets/PiecesPng/Chess_qlt60.png")
+    wKing = loadImage("/Project-Archive/FreeTime/Assets/PiecesPng/Chess_klt60.png")  
     
-    bPawn = loadImage("/Project-Archive/ChessJS/PiecesPng/Chess_pdt60.png")
-    bBishop = loadImage("/Project-Archive/ChessJS/PiecesPng/Chess_bdt60.png")
-    bRook = loadImage("/Project-Archive/ChessJS/PiecesPng/Chess_rdt60.png")
-    bKnight = loadImage("/Project-Archive/ChessJS/PiecesPng/Chess_ndt60.png")
-    bQueen = loadImage("/Project-Archive/ChessJS/PiecesPng/Chess_qdt60.png")
-    bKing = loadImage("/Project-Archive/ChessJS/PiecesPng/Chess_kdt60.png")
+    bPawn = loadImage("/Project-Archive/FreeTime/Assets/PiecesPng/Chess_pdt60.png")
+    bBishop = loadImage("/Project-Archive/FreeTime/Assets/PiecesPng/Chess_bdt60.png")
+    bRook = loadImage("/Project-Archive/FreeTime/Assets/PiecesPng/Chess_rdt60.png")
+    bKnight = loadImage("/Project-Archive/FreeTime/Assets/PiecesPng/Chess_ndt60.png")
+    bQueen = loadImage("/Project-Archive/FreeTime/Assets/PiecesPng/Chess_qdt60.png")
+    bKing = loadImage("/Project-Archive/FreeTime/Assets/PiecesPng/Chess_kdt60.png")
 }
 
 function drawPieces(){
