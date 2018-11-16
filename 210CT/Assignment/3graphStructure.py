@@ -123,18 +123,48 @@ class GraphStructure():
             
         return visited
             
+    def findDijkstra(self, toStart, end):
+        """Finds shortest path between to vertices of a given Graph using Dijkstra."""
+      
+        if toStart not in self.adjacency or end not in self.adjacency:
+            return None
         
+        current = toStart
         
+        nodesProp = {} 
+        for node in self.adjacency:
+            nodesProp[node] = {"edges": self.adjacency[node], "dist" : None , "prev" : None}
+       
+        nodesProp[toStart]["dist"] = 0 
+        visited = [] 
         
+        while current != end:     
+            for neighbour in self.adjacency[current]:
+                newDist = nodesProp[current]["dist"] + neighbour[1] #weight 
+                if nodesProp[neighbour[0]]["dist"] == None or newDist < nodesProp[neighbour[0]]["dist"]:
+                    nodesProp[neighbour[0]]["dist"] = newDist
+                    nodesProp[neighbour[0]]["prev"] = current 
+            
+            visited.append(current)
+            
+            minimum = None
+            for node in nodesProp: #finds minimum distance
+                if nodesProp[node]["dist"] == None:
+                    continue 
+                if minimum == None or nodesProp[node]["dist"] < nodesProp[minimum]["dist"]:
+                    if node not in visited:
+                        minimum = node 
+                        
+            current = minimum #next to look at 
         
-        
-        
-        
-        
-        
-        
-        
-        
+        path = [end]
+        while True:
+            path.append(nodesProp[end]["prev"])
+            end = nodesProp[end]["prev"]
+            if end == toStart:
+                break
+        path.reverse()
+        return path
         
         
         
