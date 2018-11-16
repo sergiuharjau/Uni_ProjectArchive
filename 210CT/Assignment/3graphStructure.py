@@ -44,7 +44,6 @@ class GraphStructure():
             
             path = toVisit[0] 
             current = path[0] #current node will always be first in the path list
-            
             if current in visited: 
                 del toVisit[0] 
                 continue
@@ -54,7 +53,7 @@ class GraphStructure():
                 return (True, path)        
 
             for i in range(len(self.adjacency[current])):
-                toVisit.append( [ self.adjacency[current][i] ] + path )
+                toVisit.append( [ self.adjacency[current][i][0] ] + path )
                                         #appends adjacent node to toVisit + the path it took to it 
             visited.append(current)  
             del toVisit[0]
