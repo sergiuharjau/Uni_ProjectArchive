@@ -10,17 +10,27 @@ class GraphStructure():
     """Unweighted, undirected graph class, positive integers as nodes."""
     
     def __init__(self, vertices, edges):
-        
+        """Vertices as list, edges as list of tuples"""
         self.adjacency = {} #nodes as keys, connections as lists
-        
+        #print("Vertices " + str(vertices))
+        #print("Edges " + str(edges))
         for node in vertices:
             self.adjacency[node] = [] 
             for edge in edges:
                 if node in edge:
-                    if edge[0] != node:
-                        self.adjacency[node].append(edge[0])
-                    else: self.adjacency[node].append(edge[1])
-    
+                    #print("Node is " + str(node))
+                    #print("Edge is " + str(edge))
+                    
+                    if edge[1] == node:
+                        #print(1)
+                        #print("Saving " + str((edge[0],edge[2])) + " in adjacency[" + str(node) + "]" )
+                        self.adjacency[node].append( (edge[0], edge[2])   )
+                    elif edge[0] == node:
+                        #print(2)
+                        #print("Saving " + str(edge[1:3]) + " in adjacency[" + str(node) + "]" )
+                        self.adjacency[node].append( edge[1:3] )
+                    #input()
+                                                        #tuple of (node,weight) 
     def isPath(self, start, target):
         """Returns True/False, followed by the path it took."""  
         
