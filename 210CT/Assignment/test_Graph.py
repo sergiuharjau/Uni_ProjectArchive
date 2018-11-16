@@ -56,7 +56,14 @@ class TestGraph(unittest.TestCase):
         self.assertEqual(self.complexG.traverseDepthFirst(8), [8, 6, 7, 21, 24, 9, 12, 13, 11, 10])
             #can only be really seen on big graphs
     
-    
+    def test_dijkstra(self):
+        """Checks dijkstra algorithm functionality."""
+        
+        self.assertEqual(self.simpleG.findDijkstra(1,5), [1,2,4,5])
+        self.assertEqual(self.complexG.findDijkstra(13,6), [13, 12, 8, 6])
+        self.assertEqual(self.complexG.findDijkstra(11,6), [11, 9, 6])
+        
+        self.assertEqual(self.complexG.findDijkstra(11,0), None) #not in graph 
     
 if __name__ == "__main__":
     unittest.main() 
