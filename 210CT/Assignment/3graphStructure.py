@@ -7,7 +7,7 @@ check whether or not the graph is strongly connected. The output should be simpl
 """
 
 class GraphStructure():
-    """Unweighted, undirected graph class, positive integers as nodes."""
+    """Weighted, undirected graph class, positive integers as nodes."""
     
     def __init__(self, vertices, edges):
         """Vertices as list, edges as list of tuples"""
@@ -158,12 +158,11 @@ class GraphStructure():
             current = minimum #next to look at 
         
         path = [end]
-        while True:
+        while end != toStart: #backtracks and creates path 
             path.append(nodesProp[end]["prev"])
             end = nodesProp[end]["prev"]
-            if end == toStart:
-                break
         path.reverse()
+        
         return path
         
         
