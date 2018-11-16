@@ -4,10 +4,10 @@ gs = __import__("3graphStructure")
 class TestGraph(unittest.TestCase):
     
     def setUp(self):
-        """Initiates a graph"""
-        self.simpleG = gs.GraphStructure([1, 2, 3, 4, 5], [(1,2), (2,4), (3,4), (3,5), (4,5)])
-        self.complexG = gs.GraphStructure([6, 7, 8, 9, 10, 11, 12, 13, 21, 24], [(6,7), (7,21), (21,24), (6,9), (6,8), (8,12), (12,9), (9,11), (9,10), (12,13)])   
-        self.brokenGraph = gs.GraphStructure([1,2,3,4], [(1,2), (2,3)])
+        """Initiates a graph"""                               #(node, node, weight) 
+        self.simpleG = gs.GraphStructure([1, 2, 3, 4, 5], [(1,2,3), (2,4,3), (3,4,5), (3,5,1), (4,5,2)])
+        self.complexG = gs.GraphStructure([6, 7, 8, 9, 10, 11, 12, 13, 21, 24], [(6,7,2), (7,21,1), (21,24,1), (6,9,5), (6,8,2), (8,12,2), (12,9,3), (9,11,2), (9,10,2), (12,13,4)])   
+        self.brokenGraph = gs.GraphStructure([1,2,3,4], [(1,2), (2,3)])               #(node, node, weight)
         
     def test_Creation(self):
         """Sanity check."""
