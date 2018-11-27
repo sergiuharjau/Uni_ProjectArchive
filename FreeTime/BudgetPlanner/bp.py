@@ -9,9 +9,9 @@ class Budget:
     
     rent = 150 
   
-    distributeB = 0.5
-    distributeH = 0.2   #must add up to 1
-    distributeL = 0.3
+    distributeB = 0.0
+    distributeH = 0.3   #must add up to 1
+    distributeL = 0.7   #200 quid in buffer already
     
     minimumB = 50
     minimumH = 7
