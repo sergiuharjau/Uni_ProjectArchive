@@ -152,10 +152,11 @@ class GraphStructure():
             del toVisit[0]
        
         
-        for node in self.adjacency:
+        for node in self.adjacency: #for nodes not connected to the main graph
             if node not in visited:
                 visited.append(node)
-
+        
+        GraphStructure.outputToTextfile(visited, "BFS.txt")
         return visited
     
     def traverseDepthFirst(self, toStart, visited=[]):
@@ -174,7 +175,8 @@ class GraphStructure():
             if node[0] not in visited:
                 visited.append(node[0])
                 visited = self.traverseDepthFirst(node[0], visited)
-            
+        
+        GraphStructure.outputToTextfile(visited, "DFS.txt")    
         return visited
             
     def findDijkstra(self, toStart, end):
