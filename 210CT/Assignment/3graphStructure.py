@@ -18,14 +18,55 @@ class GraphStructure():
             for edge in edges:
                 if node in edge: 
                     if edge[1] == node:
-                        self.adjacency[node].append( (edge[0], edge[2])   )
+                        self.adjacency[node].append( (edge[0], edge[2]) )
                     elif edge[0] == node: 
                         self.adjacency[node].append( edge[1:3] )
                                                     #tuple of (node,weight) 
+    
+    def addNode(self, node, connections = []):
+        """Adds node to graph, takes as optional parameter existing connections, (node,weight)."""
+        
+        self.adjacency[node] = connections
+        
+        for element in connections:
+            self.adjacency[element[0]].append( (node, element[1]) )
+            
+    def addEdges(self, edgesList):
+        """Adds a list of edges to the graph, in (firstNode, nextNode, weight) manner"""
+        
+        for edge in edgesList:
+            self.adjacency[edge[0]].append(edge[1:3])
+            self.adjacency[edge[1]].append( (edge[0],edge[2]) )
+        
+    def deleteNode(self, node):
+        """Deletes node and all its edges from given graph."""
+        
+        del self.adjacency[node]
+        
+        for key in self.adjacency: #look at every node
+            for element in self.adjacency[key]: #take each connection at a time
+                if element[0] == node: #if it had an edge with our deleted node
+                    self.adjacency[key].remove(element) #remove it 
+
+                    
+    def deleteEdges(self, edgesList):
+        """Deletes list of edges from the graph, given as (firstNode, nextNode)"""
+        
+        for edge in edgesList:
+            for element in self.adjacency[edge[0]]: #loop through the nodes connections
+                if element[0] == edge[1]: #when we hit the one we need to delete 
+                    self.adjacency[edge[0]].remove(element) #remove it
+                    break 
+            for element in self.adjacency[edge[1]]:
+                if element[0] == edge[0]:
+                    self.adjacency[edge[1]].remove(element)
+                    break
+    
     def isPath(self, start, target):
         """Returns True/False, followed by the path it took."""  
         
         if start not in self.adjacency or target not in self.adjacency:
+            GraphStructure.outputToTextfile([False],"pathOutput.txt")
             return [False]
         
         toVisit = [[start]]
@@ -41,6 +82,7 @@ class GraphStructure():
                 
             if current == target:
                 path.reverse() 
+                GraphStructure.outputToTextfile(path,"pathOutput.txt")
                 return (True, path)        
 
             for i in range(len(self.adjacency[current])):
@@ -49,8 +91,20 @@ class GraphStructure():
             visited.append(current)  
             del toVisit[0]
         
+        GraphStructure.outputToTextfile([False],"pathOutput.txt")
         return [False]  
     
+    def outputToTextfile(list1, textfile):
+        """Takes as parameter list of strings to be outputed to given textfile."""
+        
+        output = ""
+        for element in list1:
+            output += str(element) + " "
+        
+        f1 = open(textfile, "w")
+        f1.write(output)
+        f1.close()
+        
     def isConnected(self):
         """Returns True/False, whether the graph is fully connected or not."""
         
@@ -164,12 +218,5 @@ class GraphStructure():
         path.reverse()
         
         return path
-        
-        
-        
-        
-        
-        
-        
         
         
