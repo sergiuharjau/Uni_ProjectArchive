@@ -1,22 +1,3 @@
-########################################################################
-#
-# Copyright (c) 2017, STEREOLABS.
-#
-# All rights reserved.
-#
-# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-# "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-# LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-# A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
-# OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
-# SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-# LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-# DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
-# THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-# OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-#
-########################################################################
 
 """
     Read SVO sample to read the video and the information of the camera. It can pick a frame of the svo and save it as
@@ -25,7 +6,6 @@
 import sys
 import pyzed.sl as sl
 import cv2
-
 
 def main(everyNth):
 
@@ -47,7 +27,7 @@ def main(everyNth):
     mat = sl.Mat()
 
     frameNumber = 0
-    while True:  # for 'q' key
+    while True:
         frameNumber += 1
         err = cam.grab(runtime)
         if err == sl.ERROR_CODE.SUCCESS:
